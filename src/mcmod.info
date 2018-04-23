@@ -1,0 +1,8 @@
+[
+    {
+        "modid": "commandsync",
+        "name": "CommandSync",
+        "version": "2.5",
+        "description": "Synchronize commands across servers"
+    }
+]
