@@ -29,22 +29,19 @@ repositories {
         name = "Sponge"
         url = "http://repo.spongepowered.org/maven"
     }
-    maven {
-        name = 'bstats'
-        url = 'http://repo.bstats.org/content/repositories/releases/'
-    }
 	maven {
         name = 'Bukkit'
 		url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 	}
-	maven { 
-		url = 'https://oss.sonatype.org/content/repositories/snapshots' 
-	}
+	maven {
+        name 'Sonatype'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
 }
 
 dependencies {
 	compile("org.spongepowered:spongeapi:${spongeapi}")
-	compile('org.bukkit:bukkit:1.13.2-R0.1-SNAPSHOT')
+	compile('org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT')
 	compile("net.md-5:bungeecord-api:1.14-SNAPSHOT")
 }
 
