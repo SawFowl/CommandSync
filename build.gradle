@@ -29,11 +29,11 @@ repositories {
         name = "Sponge"
         url = "http://repo.spongepowered.org/maven"
     }
-	maven {
+    maven {
         name = 'Bukkit'
 		url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-	}
-	maven {
+    }
+    maven {
         name 'Sonatype'
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
