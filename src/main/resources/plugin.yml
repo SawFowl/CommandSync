@@ -1,0 +1,14 @@
+name: CommandSync
+main: sawfowl.commandsyncclient.bukkit.CSC
+version: 2.6.0
+author: YoFuzzy3
+description: Synchronize commands across servers.
+
+commands:
+  sync:
+    description: Synchronize commands across servers.
+    
+permissions:
+  sync.use:
+    description: Access to /sync.
+    default: op
