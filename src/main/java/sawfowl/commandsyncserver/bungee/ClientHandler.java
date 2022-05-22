@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncServer.Bungee;
+package sawfowl.commandsyncserver.bungee;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ClientHandler extends Thread {
@@ -122,14 +124,19 @@ public class ClientHandler extends Thread {
 						count++;
 						String output = plugin.oq.get(i);
 						String[] data = output.split(plugin.spacer);
-						if(data[1].equals("single")) {
+						boolean playerFilter = data.length > 3 && data[0].equals("console") && data[data.length - 1].equals("player") && output.contains("+");
+						String playerName = playerFilter ? data[2].replace('+', '@').split("@")[0] : "";
+						Optional<ProxiedPlayer> player = playerFilter ? ProxyServer.getInstance().getPlayers().stream().filter(p -> (playerName.equals(p.getName()))).findFirst() : Optional.empty();
+						boolean singlePlayer = player.isPresent() && player.get().isConnected() && player.get().getServer().getInfo().getName().equals(name);
+						boolean single = data[1].equals("single") || singlePlayer;
+						if(single) {
 							if(data[3].equals(name)) {
-								out.println(output);
-								plugin.getLogger().info(plugin.getLocale().getString("BungeeSentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, output));
+								send(output);
+							} else if(singlePlayer) {
+								send(output.split(plugin.spacer + "player")[0].replaceFirst(playerName + "\\+", "") + plugin.spacer + name);
 							}
 						} else {
-							out.println(output);
-							plugin.getLogger().info(plugin.getLocale().getString("BungeeSentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, output));
+							send(output);
 						}
 					}
 					plugin.qc.put(name, count);
@@ -140,5 +147,10 @@ public class ClientHandler extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private void send(String output) {
+		out.println(output);
+		plugin.getLogger().info(plugin.getLocale().getString("BungeeSentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, output));
 	}
 }

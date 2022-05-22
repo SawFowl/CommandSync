@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncClient.Sponge;
+package sawfowl.commandsyncclient.sponge;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -28,12 +28,10 @@ import org.spongepowered.api.text.channel.MessageChannel;
 
 import com.google.inject.Inject;
 
-import Mr_Krab.CommandSyncClient.Sponge.Locale;
-
 @Plugin(id = "commandsync",
 		name = "Command Sync",
-		version = "2.5.3",
-		authors = "Original - fuzzoland\nSponge version - Mr_Krab",
+		version = "2.6.0",
+		authors = "Original - fuzzoland\nSponge version - SawFowl",
 		description = "Synchronize commands across servers")
 public class CSC{
 
@@ -161,7 +159,7 @@ public class CSC{
 
 	private String[] loadConfig() {
 		String[] defaults = new String[] {
-			"ip=localhost", "port=9190", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
+			"ip=localhost", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
         try {

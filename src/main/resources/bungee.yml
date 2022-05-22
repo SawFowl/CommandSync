@@ -1,5 +1,5 @@
 name: CommandSync
-main: Mr_Krab.CommandSyncServer.Bungee.CSS
-version: 2.5.3
+main: sawfowl.commandsyncserver.bungee.CSS
+version: 2.6.0
 author: YoFuzzy3
 description: Synchronize commands across servers.

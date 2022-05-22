@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncClient.Bukkit;
+package sawfowl.commandsyncclient.bukkit;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -72,7 +72,7 @@ public class CSC extends JavaPlugin {
 	
 	public String[] loadConfig() {
 		String[] defaults = new String[] {
-			"ip=localhost", "port=9190", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
+			"ip=localhost", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
         try {

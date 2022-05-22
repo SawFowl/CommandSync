@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncClient.Bukkit;
+package sawfowl.commandsyncclient.bukkit;
 
 import java.io.File;
 import java.io.FileReader;
@@ -28,7 +28,7 @@ import org.bukkit.ChatColor;
  * it to rewrite / delete a couple of points for other applications.
  *
  * @author Dereku
- * @update Mr_Krab
+ * @update SawFowl
  */
 public class Locale {
 

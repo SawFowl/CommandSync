@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncServer.Bungee;
+package sawfowl.commandsyncserver.bungee;
 
 import java.io.File;
 import java.io.FileReader;

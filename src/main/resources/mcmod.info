@@ -2,12 +2,12 @@
     {
         "modid": "commandsync",
         "name": "CommandSync",
-        "version": "2.5.3",
+        "version": "2.6.0",
         "description": "Synchronize commands across servers",
         "url": "https://spongepowered.org",
         "authorList": [
             "YoFuzzy3",
-            "Mr_Krab"
+            "SawFowl"
         ],
         "requiredMods": [
             "spongeapi@7.1.0-SNAPSHOT"

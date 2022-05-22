@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncClient.Sponge;
+package sawfowl.commandsyncclient.sponge;
 
 import java.io.File;
 import java.io.FileOutputStream;

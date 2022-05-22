@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncServer.Bungee;
+package sawfowl.commandsyncserver.bungee;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,8 +20,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import Mr_Krab.CommandSyncServer.Bungee.Metrics.Graph;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
+import sawfowl.commandsyncserver.bungee.Metrics.Graph;
 
 public class CSS extends Plugin {
 
@@ -53,7 +54,6 @@ public class CSS extends Plugin {
 		try {
 			server = new ServerSocket(Integer.parseInt(data[1]), 50, InetAddress.getByName(data[0]));
 			logger.info(loc.getString("OpenOn", data[0], data[1]));
-			//ConsoleCommandSender.getInstance().sendMessage(loc.getString("OpenOn", data[0], data[1]));
 			new ClientListener(this, Integer.parseInt(data[2]), data[3]).start();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -88,6 +88,7 @@ public class CSS extends Plugin {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		ProxyServer.getInstance().getPluginManager().registerCommand(this, new SyncCommand(this));
 	}
 	
 	private void workData() throws IOException {
@@ -110,7 +111,7 @@ public class CSS extends Plugin {
 	
 	private String[] loadConfig() {
 		String[] defaults = new String[] {
-			"ip=localhost", "port=9190", "heartbeat=1000", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
+			"ip=localhost", "port=39999", "heartbeat=1000", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
 		try {

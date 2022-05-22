@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncClient.Bukkit;
+package sawfowl.commandsyncclient.bukkit;
 
 import java.io.BufferedReader;
 import java.io.IOException;

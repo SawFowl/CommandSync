@@ -1,4 +1,4 @@
-package Mr_Krab.CommandSyncServer.Bungee;
+package sawfowl.commandsyncserver.bungee;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
