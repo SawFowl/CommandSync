@@ -20,6 +20,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import sawfowl.commandsyncserver.bungee.Metrics.Graph;
 
@@ -87,6 +88,7 @@ public class CSS extends Plugin {
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
+		ProxyServer.getInstance().getPluginManager().registerCommand(this, new SyncCommand(this));
 	}
 	
 	private void workData() throws IOException {

@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -124,14 +125,16 @@ public class ClientHandler extends Thread {
 						String output = plugin.oq.get(i);
 						String[] data = output.split(plugin.spacer);
 						boolean playerFilter = data.length > 3 && data[0].equals("console") && data[data.length - 1].equals("player") && output.contains("+");
-						String playerName = null;
-						if(playerFilter) playerName = data[2].replace('+', '@').split("@")[0];
-						if(data[1].equals("single")) {
+						String playerName = playerFilter ? data[2].replace('+', '@').split("@")[0] : "";
+						Optional<ProxiedPlayer> player = playerFilter ? ProxyServer.getInstance().getPlayers().stream().filter(p -> (playerName.equals(p.getName()))).findFirst() : Optional.empty();
+						boolean singlePlayer = player.isPresent() && player.get().isConnected() && player.get().getServer().getInfo().getName().equals(name);
+						boolean single = data[1].equals("single") || singlePlayer;
+						if(single) {
 							if(data[3].equals(name)) {
 								send(output);
+							} else if(singlePlayer) {
+								send(output.split(plugin.spacer + "player")[0].replaceFirst(playerName + "\\+", "") + plugin.spacer + name);
 							}
-						} else if(playerName != null && ProxyServer.getInstance().getPlayer(playerName).isConnected() && ProxyServer.getInstance().getPlayer(playerName).getServer().getInfo().getName().equals(name)) {
-							send(output.split(plugin.spacer + "player")[0].replace(playerName + "+", "") + plugin.spacer + name);
 						} else {
 							send(output);
 						}

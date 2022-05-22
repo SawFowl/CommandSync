@@ -22,18 +22,19 @@ public class CommandSynchronize implements CommandExecutor {
 				sender.sendMessage(plugin.getLocale().getString("HelpAuthors"));
 				if(args.length >= 1) {
 					if(args[0].equalsIgnoreCase("console")){
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands8"));
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands7"));
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands6"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands9", "sync"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands8", "sync"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands7", "sync"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands6", "sync"));
 					} else if(args[0].equalsIgnoreCase("player")) {
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands5"));
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands4"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands5", "sync"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands4", "sync"));
 					} else {
-						sender.sendMessage(plugin.getLocale().getString("HelpCommands9"));
+						sender.sendMessage(plugin.getLocale().getString("HelpCommands10", "sync"));
 					}
 				} else {
-					sender.sendMessage(plugin.getLocale().getString("HelpCommands3"));
-					sender.sendMessage(plugin.getLocale().getString("HelpCommands2"));
+					sender.sendMessage(plugin.getLocale().getString("HelpCommands3", "sync"));
+					sender.sendMessage(plugin.getLocale().getString("HelpCommands2", "sync"));
 					sender.sendMessage(plugin.getLocale().getString("HelpCommands1"));
 				}
 				sender.sendMessage(plugin.getLocale().getString("HelpLink"));
