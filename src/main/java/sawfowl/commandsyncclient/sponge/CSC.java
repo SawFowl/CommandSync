@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +40,10 @@ public class CSC {
     public File configDir;
 
 	@Inject
-	public CSC(PluginContainer container, @ConfigDir(sharedRoot = false) File configDir) {
+	public CSC(PluginContainer container, @ConfigDir(sharedRoot = false) Path configDir) {
 		logger = LogManager.getLogger("CommandSync");
 		this.container = container;
-		this.configDir = configDir;
+		this.configDir = configDir.toFile();
 	}
 
 	public Locale getLocale() {
