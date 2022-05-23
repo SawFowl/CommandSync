@@ -92,7 +92,7 @@ public class SyncCommand extends Command {
             data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
         }
         plugin.oq.add(data);
-        sender.sendMessage(message);
+        sender.sendMessage(new TextComponent(message));
     }
 
 }

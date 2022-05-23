@@ -12,28 +12,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
-import org.spongepowered.api.event.game.state.GameStoppedEvent;
-import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
+import org.spongepowered.api.event.lifecycle.StoppedGameEvent;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import com.google.inject.Inject;
 
-@Plugin(id = "commandsync",
-		name = "Command Sync",
-		version = "2.6.0",
-		authors = "Original - fuzzoland\nSponge version - SawFowl",
-		description = "Synchronize commands across servers")
-public class CSC{
+@Plugin("commandsync")
+public class CSC {
 
 	public ClientThread client;
 	public List<String> oq = Collections.synchronizedList(new ArrayList<String>());
@@ -43,104 +34,38 @@ public class CSC{
 	private static CSC instance;
 	private Locale loc;
 	private boolean remove;
-	Logger logger;
-		
-	@Inject
-    @ConfigDir(sharedRoot = false)
+	private Logger logger;
+	private PluginContainer container;
     public File configDir;
-	
-	public MessageChannel consoleMessage(){
-		return MessageChannel.TO_CONSOLE;
+
+	@Inject
+	public CSC(PluginContainer container, @ConfigDir(sharedRoot = false) File configDir) {
+		logger = LogManager.getLogger("CommandSync");
+		this.container = container;
+		this.configDir = configDir;
 	}
 
 	public Locale getLocale() {
 		return loc;
 	}
-	
-    public void registerCommands() {
-    	CommandSpec toAllPlayers = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .arguments(GenericArguments.remainingRawJoinedStrings(Text.of("command")))
-    	        .executor((src, args) -> {
-    	            String command = args.<String>getOne(Text.of("command")).get();
-    	            String p = loc.getLegacyString("SyncPlayerAll");
-    	    		src.sendMessage(loc.getString("SyncingCommand", command, p)); 
-    	            oq.add("player" + spacer + "all" + spacer + command);
-    	            return CommandResult.success();
-    	        })
-    	        .build();
 
-    	CommandSpec playerSpec = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .child(toAllPlayers, "all")
-    	        .arguments(GenericArguments.string(Text.of("player")),
-    	                GenericArguments.remainingRawJoinedStrings(Text.of("command")))
-    	        .executor((src, args) -> {
-    	            String player = args.<String>getOne(Text.of("player")).get();
-    	            String command = args.<String>getOne(Text.of("command")).get();
-    	            String p = loc.getLegacyString("SyncPlayer", player);
-    	    		src.sendMessage(loc.getString("SyncingCommand", command, p)); 
-    	            oq.add("player" + spacer + "single" + spacer + command + spacer + player);
-    	            return CommandResult.success();
-    	        })
-    	        .build();
+	public Logger getLogger() {
+		return logger;
+	}
 
-    	CommandSpec toAllServers = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .arguments(GenericArguments.remainingRawJoinedStrings(Text.of("command")))
-    	        .executor((src, args) -> {
-    	            String command = args.<String>getOne(Text.of("command")).get();
-    	            String s = loc.getLegacyString("SyncConsoleAll");
-    	    		src.sendMessage(loc.getString("SyncingCommand", command, s)); 
-    	            oq.add("console" + spacer + "all" + spacer + command);
-    	            return CommandResult.success();
-    	        })
-    	        .build();
-
-    	CommandSpec toBungee = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .arguments(GenericArguments.remainingRawJoinedStrings(Text.of("command")))
-    	        .executor((src, args) -> {
-    	            String command = args.<String>getOne(Text.of("command")).get();
-    	            String s = loc.getLegacyString("SyncConsole", "Bungee");
-    	    		src.sendMessage(loc.getString("SyncingCommand", command, s)); 
-	            	oq.add("console" + spacer + "bungee" + spacer + command);
-    	            return CommandResult.success();
-    	        })
-    	        .build();
-
-    	CommandSpec consoleSpec = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .child(toAllServers, "all")
-    	        .child(toBungee, "bungee")
-    	        .arguments(GenericArguments.string(Text.of("server")),
-    	                GenericArguments.remainingRawJoinedStrings(Text.of("command")))
-    	        .executor((src, args) -> {
-    	            String server = args.<String>getOne(Text.of("server")).get();
-    	            String command = args.<String>getOne(Text.of("command")).get();
-    	            String s = loc.getLegacyString("SyncConsole", server);
-    	    		src.sendMessage(loc.getString("SyncingCommand", command, s)); 
-    	            oq.add("console" + spacer + "single" + spacer + command + spacer + server);
-    	            return CommandResult.success();
-    	        })
-    	        .build();
-
-    	CommandSpec spec = CommandSpec.builder()
-    	        .permission("sync.use")
-    	        .child(consoleSpec, "console")
-    	        .child(playerSpec, "player")
-    	        .build();
-
-    	Sponge.getCommandManager().register(this, spec, "sync");
-
+	public static CSC getInstance() {
+        return instance;
     }
+
+	public PluginContainer getContainer() {
+		return container;
+	}
     
 	@Listener
-	public void onServerStart(GamePreInitializationEvent event) {
-		logger = (Logger)LoggerFactory.getLogger("CommandSync");
+	public void onServerStart(ConstructPluginEvent event) {
 		String[] data = loadConfig();
 		if(data[3].equals("UNSET") || data[4].equals("UNSET")) {
-			consoleMessage().send(loc.getString("UnsetValues"));
+			logger.warn(loc.getString("UnsetValues"));
 			return;
 		}
 		try {
@@ -154,7 +79,6 @@ public class CSC{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		registerCommands();
 	}
 
 	private String[] loadConfig() {
@@ -193,7 +117,7 @@ public class CSC{
             remove = Boolean.valueOf(data[6]);
     		loc = new Locale(this, String.valueOf(data[7]));
     		loc.init();
-    		consoleMessage().send(loc.getString("ConfigLoaded"));
+			logger.info(loc.getString("ConfigLoaded"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -201,7 +125,7 @@ public class CSC{
 	}
 	
 	@Listener
-	public void onServerStop(GameStoppedEvent event) {
+	public void onServerStop(StoppedGameEvent event) {
 		saveData();
         debugger.close();
 		loc = null;
@@ -213,8 +137,8 @@ public class CSC{
         boolean remove = this.remove;
         if (remove == true) {
         	if(data.delete()){
-    			consoleMessage().send(loc.getString("DataRemoved"));
-			} else consoleMessage().send(loc.getString("DataRemoveNotFound"));
+    			logger.info(loc.getString("DataRemoved"));
+			} else logger.warn(loc.getString("DataRemoveNotFound"));
         } else {
     		loadData();
         }
@@ -229,7 +153,7 @@ public class CSC{
 			}
 			ps.println("qc:" + String.valueOf(qc));
 			ps.close();
-			consoleMessage().send(loc.getString("DataSaved"));
+			logger.info(loc.getString("DataSaved"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -250,19 +174,15 @@ public class CSC{
 						}
 						l = br.readLine();
 					}
-					consoleMessage().send(loc.getString("DataLoaded"));
+					logger.info(loc.getString("DataLoaded"));
 				} finally {
 					br.close();
 				}
 			} else {
-				consoleMessage().send(loc.getString("DataNotfound"));
+				logger.warn(loc.getString("DataNotfound"));
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
-		
-	public static CSC getInstance() {
-        return instance;
-    }
 }
