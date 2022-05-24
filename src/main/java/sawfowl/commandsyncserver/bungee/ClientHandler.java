@@ -31,17 +31,17 @@ public class ClientHandler extends Thread {
 		this.pass = pass;
 		out = new PrintWriter(socket.getOutputStream(), true);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		plugin.getLogger().info(plugin.getLocale().getString("BungeeConnect", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort())));
+		plugin.getLoger().info(plugin.getLocale().getString("BungeeConnect", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort())));
 		name = in.readLine();
 		if(plugin.c.contains(name)) {
-			plugin.getLogger().info(plugin.getLocale().getString("NameErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
+			plugin.getLoger().info(plugin.getLocale().getString("NameErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
 		    out.println("n");
 		    socket.close();
 		    return;
 		}
 		out.println("y");
 		if(!in.readLine().equals(this.pass)) {
-			plugin.getLogger().info(plugin.getLocale().getString("PassError", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
+			plugin.getLoger().info(plugin.getLocale().getString("PassError", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
 			out.println("n");
 			socket.close();
 			return;
@@ -49,7 +49,7 @@ public class ClientHandler extends Thread {
 		out.println("y");
 		String version = in.readLine();
 		if(!version.equals(this.version)) {
-			plugin.getLogger().info(plugin.getLocale().getString("VersionErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, version, this.version));
+			plugin.getLoger().info(plugin.getLocale().getString("VersionErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, version, this.version));
 		    out.println("n");
 		    out.println(this.version);
 		    socket.close();
@@ -60,7 +60,7 @@ public class ClientHandler extends Thread {
 		    plugin.qc.put(name, 0);
 		}
 		plugin.c.add(name);
-		plugin.getLogger().info(plugin.getLocale().getString("ConnectFrom", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
+		plugin.getLoger().info(plugin.getLocale().getString("ConnectFrom", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
 	}
 
 	public void run() {
@@ -68,14 +68,14 @@ public class ClientHandler extends Thread {
 			try {
 				out.println("heartbeat");
 				if(out.checkError()) {
-					plugin.getLogger().info(plugin.getLocale().getString("Disconect", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
+					plugin.getLoger().info(plugin.getLocale().getString("Disconect", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
 					plugin.c.remove(name);
 					return;
 				}
 				while(in.ready()) {
 					String input = in.readLine();
 					if(!input.equals("heartbeat")) {
-						plugin.getLogger().info(plugin.getLocale().getString("BungeeInput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, input));
+						plugin.getLoger().info(plugin.getLocale().getString("BungeeInput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, input));
 						String[] data = input.split(plugin.spacer);
 						if(data[0].equals("player")) {
 							String command = "/" + data[2].replaceAll("\\+", " ");
@@ -85,7 +85,7 @@ public class ClientHandler extends Thread {
 								for(ProxiedPlayer player : plugin.getProxy().getPlayers()) {
 									if(name.equals(player.getName())){
 										player.chat(command);
-										plugin.getLogger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", command, name));
+										plugin.getLoger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", command, name));
 										found = true;
 										break;
 									}
@@ -98,19 +98,19 @@ public class ClientHandler extends Thread {
 									} else {
 										plugin.pq.put(name, new ArrayList<String>(Arrays.asList(command)));
 									}
-									plugin.getLogger().info(plugin.getLocale().getString("BungeeRanPlayerOffline", name, command));
+									plugin.getLoger().info(plugin.getLocale().getString("BungeeRanPlayerOffline", name, command));
 								}
 							} else if(data[1].equals("all")) {
 								for(ProxiedPlayer player : plugin.getProxy().getPlayers()) {
 									player.chat(command);
 								}
-								plugin.getLogger().info(plugin.getLocale().getString("BungeeRanAll", command));
+								plugin.getLoger().info(plugin.getLocale().getString("BungeeRanAll", command));
 							}
 						} else {
 							if(data[1].equals("bungee")) {
 								String command = data[2].replaceAll("\\+", " ");
 								plugin.getProxy().getPluginManager().dispatchCommand(plugin.getProxy().getConsole(), command);
-								plugin.getLogger().info(plugin.getLocale().getString("BungeeRanServer", command));
+								plugin.getLoger().info(plugin.getLocale().getString("BungeeRanServer", command));
 							} else {
 								plugin.oq.add(input);
 							}
@@ -151,6 +151,6 @@ public class ClientHandler extends Thread {
 
 	private void send(String output) {
 		out.println(output);
-		plugin.getLogger().info(plugin.getLocale().getString("BungeeSentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, output));
+		plugin.getLoger().info(plugin.getLocale().getString("BungeeSentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, output));
 	}
 }

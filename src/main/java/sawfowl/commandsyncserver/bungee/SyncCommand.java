@@ -14,6 +14,7 @@ public class SyncCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        plugin.getLoger().warn(args.length);
         if(!sender.hasPermission("sync.use")) {
             sender.sendMessage(new TextComponent(plugin.getLocale().getString("NoPerm")));
             return;

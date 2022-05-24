@@ -55,13 +55,13 @@ public class Locale {
             try (FileReader fr = new FileReader(this.localeFile)) {
                 this.locale.load(fr);
             } catch (Exception ex) {
-            	instance.getLogger().log(Level.WARNING, "Failed to load " + loc + " locale!", ex);
+            	instance.getLoger().warn("Failed to load " + loc + " locale!", ex);
             }
         } else {
             try {
                 this.locale.load(getClass().getResourceAsStream("/en_US.properties"));
             } catch (IOException ex) {
-            	instance.getLogger().log(Level.WARNING, "Failed to load en_US locale!", ex);
+            	instance.getLoger().warn("Failed to load en_US locale!", ex);
             }
         }
     }
@@ -156,7 +156,7 @@ public class Locale {
         File enFile = new File(instance.getDataFolder() + File.separator + "en_US.properties");
         String is = "/" + name + ".properties";
         if (getClass().getResource(is) == null) {
-        	instance.getLogger().log(Level.WARNING, "Failed to save \"" + name + ".properties \"");
+        	instance.getLoger().warn("Failed to save \"" + name + ".properties \"");
             if (!enFile.exists()){
             try {
                 URI u = getClass().getResource("/en_US.properties").toURI();
@@ -164,9 +164,9 @@ public class Locale {
     			Files.copy(jarFS.getPath(u.toString().split("!")[1]), new File(instance.getDataFolder() + File.separator + "en_US.properties").toPath());
     	        jarFS.close();
     		} catch (IOException ex) {
-            	instance.getLogger().log(Level.WARNING, "Failed to save \"" + name + ".properties \"", ex);
+            	instance.getLoger().warn("Failed to save \"" + name + ".properties \"", ex);
     		} catch (URISyntaxException e) {
-            	instance.getLogger().log(Level.WARNING, "Locale \"{0}\" does not exists!\"", name);
+            	instance.getLoger().warn("Locale \"{0}\" does not exists!\"", name);
     		}
             return false;
             }
@@ -178,9 +178,9 @@ public class Locale {
 			Files.copy(jarFS.getPath(u.toString().split("!")[1]), new File(instance.getDataFolder() + File.separator + name + ".properties").toPath());
 	        jarFS.close();
 		} catch (IOException ex) {
-        	instance.getLogger().log(Level.WARNING, "Failed to save \"" + name + ".properties \"", ex);
+        	instance.getLoger().warn("Failed to save \"" + name + ".properties \"", ex);
 		} catch (URISyntaxException e) {
-        	instance.getLogger().log(Level.WARNING, "Locale \"{0}\" does not exists!\"", name);
+        	instance.getLoger().warn("Locale \"{0}\" does not exists!\"", name);
 		}	
         }
         return true;

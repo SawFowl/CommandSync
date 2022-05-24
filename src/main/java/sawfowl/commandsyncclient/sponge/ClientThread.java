@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.CommandException;
 
@@ -122,7 +123,7 @@ public class ClientThread extends Thread {
                 return;
             }
 			connected = true;
-			plugin.getLogger().error(plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name));
+			plugin.getLogger().info((plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name)));
 		} catch(IOException e) {
 			plugin.getLogger().error(plugin.getLocale().getString("NoConnect"));
 		}

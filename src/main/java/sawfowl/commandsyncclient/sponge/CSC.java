@@ -8,15 +8,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StoppedGameEvent;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
@@ -39,10 +43,11 @@ public class CSC {
     public File configDir;
 
 	@Inject
-	public CSC(PluginContainer container, @ConfigDir(sharedRoot = false) File configDir) {
+	public CSC(PluginContainer container, @ConfigDir(sharedRoot = false) Path configDir) {
+		instance = this;
 		logger = LogManager.getLogger("CommandSync");
 		this.container = container;
-		this.configDir = configDir;
+		this.configDir = configDir.toFile();
 	}
 
 	public Locale getLocale() {
@@ -79,6 +84,12 @@ public class CSC {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Listener
+	public void onRegisterRawSpongeCommand(final RegisterCommandEvent<Command.Raw> event) {
+		CommandSynchronize mainCommand = new CommandSynchronize(instance);
+		event.register(container, mainCommand, "sync");
 	}
 
 	private String[] loadConfig() {
