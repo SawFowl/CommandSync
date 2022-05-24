@@ -1,7 +1,7 @@
 plugins {
     id("java")
     id("java-library")
-    //id("org.spongepowered.gradle.vanilla") version "0.2"
+    id("org.spongepowered.gradle.vanilla") version "0.2"
 }
 
 group = "sawfowl"
@@ -33,14 +33,14 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-//minecraft {
-//    version("1.12.2")
-//
-//    runs {
-//        server()
-//        client()
-//    }
-//}
+minecraft {
+    version("1.16.5")
+
+    runs {
+        server()
+        client()
+    }
+}
 
 dependencies {
     implementation "org.spongepowered:spongeapi:${spongeapi}"

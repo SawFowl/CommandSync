@@ -23,7 +23,7 @@ public class CommandThread extends Thread {
 			try {
 				for(String command : commands) {
 					player.chat(command);
-					plugin.getLogger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", command, name));
+					plugin.getLoger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", command, name));
 				}
 				plugin.pq.remove(name);
 				return;
@@ -31,7 +31,7 @@ public class CommandThread extends Thread {
 				try {
 					sleep(1000);
 				} catch(InterruptedException e2) {
-					e2.printStackTrace();
+					plugin.getLoger().error(e2.getLocalizedMessage());
 				}
 			}
 		}

@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.logging.Logger;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -35,20 +37,21 @@ public class CSS extends Plugin {
 	public Debugger debugger;
 	private Locale loc;
 	private boolean remove;
-	public Logger logger = Logger.getLogger("CommandSync");
+	public Logger logger;
 
 	public Locale getLocale() {
 		return loc;
 	}
 
-	public Logger getLogger() {
+	public Logger getLoger() {
 		return logger;
 	}
 
 	public void onEnable() {
+		logger = LogManager.getLogger("CommandSync");
 		String[] data = loadConfig();
 		if(data[3].equals("UNSET")) {
-			logger.warning(loc.getString("UnsetValues"));
+			logger.warn(loc.getString("UnsetValues"));
 			return;
 		}
 		try {

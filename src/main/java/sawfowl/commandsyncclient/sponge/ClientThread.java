@@ -6,10 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.command.exception.CommandException;
 
 public class ClientThread extends Thread {
 
@@ -46,7 +45,7 @@ public class ClientThread extends Thread {
 				out.println("heartbeat");
 				if(out.checkError()) {
 					connected = false;
-					plugin.consoleMessage().send(plugin.getLocale().getString("ConnectLost"));
+					plugin.getLogger().warn(plugin.getLocale().getString("ConnectLost"));
 				} else {
 					try {
 						Integer size = plugin.oq.size();
@@ -56,21 +55,25 @@ public class ClientThread extends Thread {
 								count++;
 								String output = plugin.oq.get(i);
 								out.println(output);
-								plugin.consoleMessage().send(plugin.getLocale().getString("SentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), output));
+								plugin.getLogger().info(plugin.getLocale().getString("SentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), output));
 							}
 							plugin.qc = count;
 						}
 						while(in.ready()) {
 							String input = in.readLine();
 							if(!input.equals("heartbeat")) {
-								plugin.consoleMessage().send(plugin.getLocale().getString("ReceivedInput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), input));
+								plugin.getLogger().info(plugin.getLocale().getString("ReceivedInput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), input));
 								String[] data = input.split(plugin.spacer);
 								if(data[0].equals("console")) {
 									String command = data[2].replaceAll("\\+", " ");
-									plugin.consoleMessage().send(plugin.getLocale().getString("RanCommand", command));
-									Task.builder().execute(() -> Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command))
-										    .delay(100, TimeUnit.MILLISECONDS)
-										    .submit(plugin);
+									plugin.getLogger().info(plugin.getLocale().getString("RanCommand", command));
+									Sponge.server().scheduler().executor(plugin.getContainer()).execute(() -> {
+										try {
+											Sponge.server().commandManager().process(Sponge.systemSubject(), command);
+										} catch (CommandException e) {
+											plugin.getLogger().error(e.getLocalizedMessage());
+										}
+									});
 								}
 							}
 						}
@@ -103,26 +106,26 @@ public class ClientThread extends Thread {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out.println(name);
 			if(in.readLine().equals("n")) {
-				plugin.consoleMessage().send(plugin.getLocale().getString("NameError", name));
+				plugin.getLogger().error(plugin.getLocale().getString("NameError", name));
 			    socket.close();
 			    return;
 			}
 			out.println(pass);
 			if(in.readLine().equals("n")) {
-				plugin.consoleMessage().send(plugin.getLocale().getString("InvalidPassword"));
+				plugin.getLogger().error(plugin.getLocale().getString("InvalidPassword"));
 			    socket.close();
 				return;
 			}
             out.println(version);
             if(in.readLine().equals("n")) {
-				plugin.consoleMessage().send(plugin.getLocale().getString("VersionError", version, in.readLine()));
+				plugin.getLogger().error(plugin.getLocale().getString("VersionError", version, in.readLine()));
                 socket.close();
                 return;
             }
 			connected = true;
-			plugin.consoleMessage().send(plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name));
+			plugin.getLogger().info((plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name)));
 		} catch(IOException e) {
-			plugin.consoleMessage().send(plugin.getLocale().getString("NoConnect"));
+			plugin.getLogger().error(plugin.getLocale().getString("NoConnect"));
 		}
 	}
 }

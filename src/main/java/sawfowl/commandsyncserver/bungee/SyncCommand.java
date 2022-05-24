@@ -14,6 +14,7 @@ public class SyncCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        plugin.getLoger().warn(args.length);
         if(!sender.hasPermission("sync.use")) {
             sender.sendMessage(new TextComponent(plugin.getLocale().getString("NoPerm")));
             return;
@@ -92,7 +93,7 @@ public class SyncCommand extends Command {
             data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
         }
         plugin.oq.add(data);
-        sender.sendMessage(message);
+        sender.sendMessage(new TextComponent(message));
     }
 
 }

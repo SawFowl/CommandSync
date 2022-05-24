@@ -68,8 +68,7 @@ public class CSC extends JavaPlugin {
     		loadData();
         }
 	}
-	
-	
+
 	public String[] loadConfig() {
 		String[] defaults = new String[] {
 			"ip=localhost", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
