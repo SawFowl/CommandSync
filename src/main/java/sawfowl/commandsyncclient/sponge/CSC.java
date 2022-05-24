@@ -15,9 +15,11 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StoppedGameEvent;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
@@ -80,6 +82,12 @@ public class CSC {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Listener
+	public void onRegisterRawSpongeCommand(final RegisterCommandEvent<Command.Raw> event) {
+		CommandSynchronize mainCommand = new CommandSynchronize(instance);
+		event.register(container, mainCommand, "sync");
 	}
 
 	private String[] loadConfig() {
