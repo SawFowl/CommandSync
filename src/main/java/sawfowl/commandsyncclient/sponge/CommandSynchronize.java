@@ -35,25 +35,25 @@ public class CommandSynchronize implements Command.Raw {
 		String[] args = Stream.of(arguments.input().split(" ")).filter(string -> (!string.equals(""))).toArray(String[]::new);
 		if(args.length >= 0) {
 			if(args.length <= 2) {
-				cause.audience().sendMessage(plugin.getLocale().getString("HelpAuthors"));
+				cause.audience().sendMessage(plugin.getLocale().getComponent("HelpAuthors"));
 				if(args.length >= 1) {
 					if(args[0].equalsIgnoreCase("console")){
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands9", "sync"));
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands8", "sync"));
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands7", "sync"));
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands6", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands9", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands8", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands7", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands6", "sync"));
 					} else if(args[0].equalsIgnoreCase("player")) {
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands5", "sync"));
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands4", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands5", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands4", "sync"));
 					} else {
-						cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands10", "sync"));
+						cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands10", "sync"));
 					}
 				} else {
-					cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands3", "sync"));
-					cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands2", "sync"));
-					cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands1"));
+					cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands3", "sync"));
+					cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands2", "sync"));
+					cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands1"));
 				}
-				cause.audience().sendMessage(plugin.getLocale().getString("HelpLink"));
+				cause.audience().sendMessage(plugin.getLocale().getComponent("HelpLink"));
 			} else if(args.length >= 3) {
 				if(args[0].equalsIgnoreCase("console") || args[0].equalsIgnoreCase("player")) {
 				    String[] newArgs = new String[3];
@@ -73,7 +73,7 @@ public class CommandSynchronize implements Command.Raw {
 					    makeData(newArgs, true, cause);
 					}
 				} else {
-					cause.audience().sendMessage(plugin.getLocale().getString("HelpCommands9"));
+					cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands9"));
 				}
 			}
 		}
@@ -115,20 +115,20 @@ public class CommandSynchronize implements Command.Raw {
 
 	private void makeData(String[] args, Boolean single, CommandCause cause) {
 		String data;
-		Component message;
+		String message;
 		if(args[0].equalsIgnoreCase("console")) {
 			if(args[1].equalsIgnoreCase("all")) {
-				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), serialize(plugin.getLocale().getString("SyncConsoleAll")));
+				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), plugin.getLocale().getString("SyncConsoleAll"));
 			} else {
-				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), serialize(plugin.getLocale().getString("SyncConsole", args[1])));
+				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), plugin.getLocale().getString("SyncConsole", args[1]));
 			}
 		} else if(args[0].equalsIgnoreCase("bungee") || args[0].equalsIgnoreCase("proxy")) {
-			message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  serialize(plugin.getLocale().getString("SyncConsole", args[1])));
+			message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
 		} else {
 			if(args[1].equalsIgnoreCase("all")) {
-				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), serialize(plugin.getLocale().getString("SyncPlayerAll")));
+				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), plugin.getLocale().getString("SyncPlayerAll"));
 			} else {
-				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), serialize(plugin.getLocale().getString("SyncPlayer", args[1])));
+				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), plugin.getLocale().getString("SyncPlayer", args[1]));
 			}
 		}
 		if(single) {
@@ -137,11 +137,11 @@ public class CommandSynchronize implements Command.Raw {
 		    data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
 		}
 		plugin.oq.add(data);
-		cause.audience().sendMessage(message);
+		cause.audience().sendMessage(deserialize(message));
 	}
 
-	private String serialize(Component component) {
-		return LegacyComponentSerializer.legacyAmpersand().serialize(component);
+	private Component deserialize(String string) {
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
 	}
 
 }

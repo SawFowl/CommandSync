@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
@@ -74,8 +75,8 @@ public class Locale {
      * @param key - message key
      * @return message, otherwise null
      */
-    public Component getString(final String key) {
-        return getString(key, false, "");
+    public Component getComponent(final String key) {
+        return getComponent(key, false, "");
     }
 
     /**
@@ -87,7 +88,20 @@ public class Locale {
      * @param args - arguments of the message. Only String format.
      * @return message, otherwise null
      */
-    public Component getString(final String key, final String... args) {
+    public Component getComponent(final String key, final String... args) {
+        return this.getComponent(key, false, args);
+    }
+
+    /**
+     * Receiving a message with arguments from the configuration <br>
+     * Example message: "There is {0} players: {1}." <br>
+     * Example call: getString("key", "2", "You, Me");
+     *
+     * @param key - message key
+     * @param args - arguments of the message. Only String format.
+     * @return message, otherwise null
+     */
+    public String getString(final String key, final String... args) {
         return this.getString(key, false, args);
     }
 
@@ -100,8 +114,21 @@ public class Locale {
      * @param removeColors if true, then the colors will be removed
      * @return message, otherwise null
      */
-    public Component getString(final String key, final boolean removeColors) {
-        return this.getString(key, removeColors, "");
+    public Component getComponent(final String key, final boolean removeColors) {
+        return this.getComponent(key, removeColors, "");
+    }
+
+    /**
+     * Receiving a message from a configuration with the ability to filter color <br>
+     * Example message: "\u00a76There is so many players." <br>
+     * Example call: getString("key", false);
+     *
+     * @param key - message key
+     * @param removeColors if true, then the colors will be removed
+     * @return message, otherwise null
+     */
+    public String getString(final String key, final boolean removeColors) {
+        return getString(key, removeColors, "");
     }
 
     /**
@@ -114,7 +141,34 @@ public class Locale {
      * @param args - arguments of the message. Only String format.
      * @return message, otherwise null
      */
-    public Component getString(final String key, final boolean removeColors, final String... args) {
+    public String getString(final String key, final boolean removeColors, final String... args) {
+        String out = this.locale.getProperty(key);
+        if (out == null) {
+            return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r"));
+        }
+        MessageFormat mf = this.messageCache.get(out);
+        if (mf == null) {
+            mf = new MessageFormat(out);
+            this.messageCache.put(out, mf);
+        }
+        out = mf.format(args);
+        if (removeColors) {
+            return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build()));
+        }
+        return out;
+    }
+
+    /**
+     * Receiving a message with arguments from a configuration with the ability to filter the color <br>
+     * Example message: "\u00a76There is \u00a7c{0} \u00a76players:\u00a7c {1}." <br>
+     * Example call: getString("key", false, "2", "You, Me"); <br>
+     *
+     * @param key - message key
+     * @param removeColors - if true, then the colors will be removed
+     * @param args - arguments of the message. Only String format.
+     * @return message, otherwise null
+     */
+    public Component getComponent(final String key, final boolean removeColors, final String... args) {
         String out = this.locale.getProperty(key);
         if (out == null) {
         	return LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r");
@@ -125,11 +179,10 @@ public class Locale {
             this.messageCache.put(out, mf);
         }
         out = mf.format(args);
-        Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(out);
         if (removeColors) {
-        	component.decorations().clear();
+            return LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build());
         }
-        return component;
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(out);
     }
     
     /**

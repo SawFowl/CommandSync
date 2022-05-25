@@ -45,7 +45,7 @@ public class ClientThread extends Thread {
 				out.println("heartbeat");
 				if(out.checkError()) {
 					connected = false;
-					plugin.getLogger().warn(plugin.getLocale().getString("ConnectLost"));
+					plugin.getLogger().warn(plugin.getLocale().getString("ConnectLost", true));
 				} else {
 					try {
 						Integer size = plugin.oq.size();
@@ -55,18 +55,18 @@ public class ClientThread extends Thread {
 								count++;
 								String output = plugin.oq.get(i);
 								out.println(output);
-								plugin.getLogger().info(plugin.getLocale().getString("SentOutput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), output));
+								plugin.getLogger().info(plugin.getLocale().getString("SentOutput", true, socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), output));
 							}
 							plugin.qc = count;
 						}
 						while(in.ready()) {
 							String input = in.readLine();
 							if(!input.equals("heartbeat")) {
-								plugin.getLogger().info(plugin.getLocale().getString("ReceivedInput", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), input));
+								plugin.getLogger().info(plugin.getLocale().getString("ReceivedInput", true, socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), input));
 								String[] data = input.split(plugin.spacer);
 								if(data[0].equals("console")) {
 									String command = data[2].replaceAll("\\+", " ");
-									plugin.getLogger().info(plugin.getLocale().getString("RanCommand", command));
+									plugin.getLogger().info(plugin.getLocale().getString("RanCommand", true, command));
 									Sponge.server().scheduler().executor(plugin.getContainer()).execute(() -> {
 										try {
 											Sponge.server().commandManager().process(Sponge.systemSubject(), command);
@@ -106,26 +106,26 @@ public class ClientThread extends Thread {
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			out.println(name);
 			if(in.readLine().equals("n")) {
-				plugin.getLogger().error(plugin.getLocale().getString("NameError", name));
+				plugin.getLogger().error(plugin.getLocale().getString("NameError", true, name));
 			    socket.close();
 			    return;
 			}
 			out.println(pass);
 			if(in.readLine().equals("n")) {
-				plugin.getLogger().error(plugin.getLocale().getString("InvalidPassword"));
+				plugin.getLogger().error(plugin.getLocale().getString("InvalidPassword", true));
 			    socket.close();
 				return;
 			}
             out.println(version);
             if(in.readLine().equals("n")) {
-				plugin.getLogger().error(plugin.getLocale().getString("VersionError", version, in.readLine()));
+				plugin.getLogger().error(plugin.getLocale().getString("VersionError", true, version, in.readLine()));
                 socket.close();
                 return;
             }
 			connected = true;
-			plugin.getLogger().info((plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name)));
+			plugin.getLogger().info((plugin.getLocale().getString("ConnectInfo", true, ip.getHostName(), String.valueOf(port), name)));
 		} catch(IOException e) {
-			plugin.getLogger().error(plugin.getLocale().getString("NoConnect"));
+			plugin.getLogger().error(plugin.getLocale().getString("NoConnect", true));
 		}
 	}
 }
