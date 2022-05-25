@@ -128,7 +128,7 @@ public class CSC {
             remove = Boolean.valueOf(data[6]);
     		loc = new Locale(this, String.valueOf(data[7]));
     		loc.init();
-			logger.info(loc.getString("ConfigLoaded"));
+			logger.info(loc.getString("ConfigLoaded", true));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -148,8 +148,8 @@ public class CSC {
         boolean remove = this.remove;
         if (remove == true) {
         	if(data.delete()){
-    			logger.info(loc.getString("DataRemoved"));
-			} else logger.warn(loc.getString("DataRemoveNotFound"));
+    			logger.info(loc.getString("DataRemoved", true));
+			} else logger.warn(loc.getString("DataRemoveNotFound", true));
         } else {
     		loadData();
         }
@@ -164,7 +164,7 @@ public class CSC {
 			}
 			ps.println("qc:" + String.valueOf(qc));
 			ps.close();
-			logger.info(loc.getString("DataSaved"));
+			logger.info(loc.getString("DataSaved", true));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -185,15 +185,16 @@ public class CSC {
 						}
 						l = br.readLine();
 					}
-					logger.info(loc.getString("DataLoaded"));
+					logger.info(loc.getString("DataLoaded", true));
 				} finally {
 					br.close();
 				}
 			} else {
-				logger.warn(loc.getString("DataNotfound"));
+				logger.warn(loc.getString("DataNotfound", true));
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
+
 }
