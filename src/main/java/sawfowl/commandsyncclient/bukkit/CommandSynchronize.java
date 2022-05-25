@@ -51,7 +51,7 @@ public class CommandSynchronize implements CommandExecutor {
 				        }
 				    }
 				    newArgs[2] = sb.toString();
-					if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee")) {
+					if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee") || args[1].equalsIgnoreCase("proxy")) {
 						makeData(newArgs, false, sender);
 					} else {
 					    makeData(newArgs, true, sender);
@@ -73,7 +73,7 @@ public class CommandSynchronize implements CommandExecutor {
 			} else {
 				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
 			}
-		} else if(args[0].equalsIgnoreCase("bungee")) {
+		} else if(args[0].equalsIgnoreCase("bungee") || args[0].equalsIgnoreCase("proxy")) {
 			message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
 		} else {
 			if(args[1].equalsIgnoreCase("all")) {

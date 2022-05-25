@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandCause;
 import org.spongepowered.api.command.CommandCompletion;
@@ -68,7 +67,7 @@ public class CommandSynchronize implements Command.Raw {
 				        }
 				    }
 				    newArgs[2] = sb.toString();
-					if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee")) {
+					if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee") || args[1].equalsIgnoreCase("proxy")) {
 						makeData(newArgs, false, cause);
 					} else {
 					    makeData(newArgs, true, cause);
@@ -123,7 +122,7 @@ public class CommandSynchronize implements Command.Raw {
 			} else {
 				message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "), serialize(plugin.getLocale().getString("SyncConsole", args[1])));
 			}
-		} else if(args[0].equalsIgnoreCase("bungee")) {
+		} else if(args[0].equalsIgnoreCase("bungee") || args[0].equalsIgnoreCase("proxy")) {
 			message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  serialize(plugin.getLocale().getString("SyncConsole", args[1])));
 		} else {
 			if(args[1].equalsIgnoreCase("all")) {

@@ -1,8 +1,12 @@
 package sawfowl.commandsyncserver.bungee;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+
+import java.util.Optional;
 
 public class SyncCommand extends Command {
 
@@ -14,7 +18,6 @@ public class SyncCommand extends Command {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        plugin.getLoger().warn(args.length);
         if(!sender.hasPermission("sync.use")) {
             sender.sendMessage(new TextComponent(plugin.getLocale().getString("NoPerm")));
             return;
@@ -78,14 +81,24 @@ public class SyncCommand extends Command {
             } else {
                 message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
             }
-        } else if(args[0].equalsIgnoreCase("bungee")) {
+        } else if(args[0].equalsIgnoreCase("bungee") || args[0].equalsIgnoreCase("proxy")) {
             message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
         } else {
             if(args[1].equalsIgnoreCase("all")) {
-                message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncPlayerAll"));
+                String command = args[2].replaceAll("\\+", " ");
+                if(!command.startsWith("/")) command = "/" + command;
+                sender.sendMessage(new TextComponent(plugin.getLocale().getString("BungeeRanAll", command)));
+                for(ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) player.chat(command);
             } else {
-                message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncPlayer", args[1]));
+                Optional<ProxiedPlayer> player = ProxyServer.getInstance().getPlayers().stream().filter(p -> (args[1].equals(p.getName()))).findFirst();
+                String command = args[2].replaceAll("\\+", " ");
+                if(!command.startsWith("/")) command = "/" + command;
+                if(player.isPresent()) {
+                    player.get().chat(command);
+                    sender.sendMessage(new TextComponent(plugin.getLocale().getString("BungeeRanPlayerSingle", command, args[1])));
+                }
             }
+            return;
         }
         if(single) {
             data = args[0].toLowerCase() + plugin.spacer + "single" + plugin.spacer + args[2] + plugin.spacer + args[1];
