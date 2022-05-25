@@ -23,7 +23,7 @@ public class CommandThread extends Thread {
 			try {
 				for(String command : commands) {
 					player.spoofChatInput(command);
-					plugin.getLoger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", command, name));
+					plugin.getLoger().info(plugin.getLocale().getString("BungeeRanPlayerSingle", true, command, name));
 				}
 				plugin.pq.remove(name);
 				return;

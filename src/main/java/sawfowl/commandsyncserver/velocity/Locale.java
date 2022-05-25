@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -130,9 +131,7 @@ public class Locale {
         out = mf.format(args);
 
         if (removeColors) {
-        	Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(out);
-        	component.decorations().clear();
-            out = LegacyComponentSerializer.legacyAmpersand().serialize(component);
+            out = LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build()));
         }
         
         return out;

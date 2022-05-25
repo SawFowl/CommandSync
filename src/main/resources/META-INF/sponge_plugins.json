@@ -5,7 +5,7 @@
     },
     "license": "GNU",
     "global": {
-        "version": "2.7.0-API8",
+        "version": "2.8.0-API8",
         "links": {
             "homepage": "https://ore.spongepowered.org/Semenkovsky_Ivan/CommandSync",
             "source": "https://github.com/SawFowl/CommandSync",

@@ -87,7 +87,7 @@ public class CSS {
 		}
 		try {
 			server = new ServerSocket(Integer.parseInt(data[1]), 50, InetAddress.getByName(data[0]));
-			logger.info(loc.getString("OpenOn", data[0], data[1]));
+			logger.info(loc.getString("OpenOn", true, data[0], data[1]));
 			new ClientListener(this, Integer.parseInt(data[2]), data[3]).start();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -134,8 +134,8 @@ public class CSS {
         boolean remove = this.remove;
         if (remove == true) {
         	if(data.delete()) {
-    			logger.info(loc.getString("DataRemoved"));
-			} else logger.info(loc.getString("DataRemoveNotFound")); 
+    			logger.info(loc.getString("DataRemoved", true));
+			} else logger.info(loc.getString("DataRemoveNotFound", true));
         } else {
     		loadData();
         }
@@ -182,7 +182,7 @@ public class CSS {
             remove = Boolean.valueOf(data[5]);
     		loc = new Locale(this, String.valueOf(data[6]));
     		loc.init();
-			logger.info(loc.getString("ConfigLoaded"));
+			logger.info(loc.getString("ConfigLoaded", true));
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -206,7 +206,7 @@ public class CSS {
 				ps.println("qc:" + e.getKey() + spacer + String.valueOf(e.getValue()));
 			}
 			ps.close();
-			logger.info(loc.getString("DataSaved"));
+			logger.info(loc.getString("DataSaved", true));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -238,12 +238,12 @@ public class CSS {
 						}
 						l = br.readLine();
 					}
-					logger.info(loc.getString("DataLoaded"));
+					logger.info(loc.getString("DataLoaded", true));
 				} finally {
 					br.close();
 				}
 			} else {
-				logger.info(loc.getString("DataNotfound"));
+				logger.info(loc.getString("DataNotfound", true));
 			}
 		} catch(IOException e) {
 			e.printStackTrace();

@@ -3,7 +3,11 @@ package sawfowl.commandsyncserver.velocity;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 
+import com.velocitypowered.api.proxy.Player;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
+import java.util.Optional;
 
 public class SyncCommand implements SimpleCommand {
 
@@ -16,8 +20,8 @@ public class SyncCommand implements SimpleCommand {
 	public void execute(Invocation invocation) {
 		CommandSource source = invocation.source();
 		String[] args = invocation.arguments();
-        if(args.length >= 2 && args[0].equalsIgnoreCase("console") && args[1].equalsIgnoreCase("bungee")) {
-        	source.sendMessage(Component.text(plugin.getLocale().getString("CantUseArgProxyServer")));
+        if(args.length >= 2 && args[0].equalsIgnoreCase("console") && (args[1].equalsIgnoreCase("bungee") || args[1].equalsIgnoreCase("proxy"))) {
+        	source.sendMessage(deserialize(plugin.getLocale().getString("CantUseArgProxyServer")));
             return;
         }
         if(args.length >= 0) {
@@ -25,22 +29,22 @@ public class SyncCommand implements SimpleCommand {
                 source.sendMessage(Component.text(plugin.getLocale().getString("HelpAuthors")));
                 if(args.length >= 1) {
                     if(args[0].equalsIgnoreCase("console")){
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands9", "proxysync")));
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands8", "proxysync")));
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands7", "proxysync")));
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands6", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands9", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands8", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands7", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands6", "proxysync")));
                     } else if(args[0].equalsIgnoreCase("player")) {
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands5", "proxysync")));
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands4", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands5", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands4", "proxysync")));
                     } else {
-                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands10", "proxysync")));
+                        source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands10", "proxysync")));
                     }
                 } else {
-                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands3", "proxysync")));
-                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands2", "proxysync")));
-                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands1")));
+                    source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands3", "proxysync")));
+                    source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands2", "proxysync")));
+                    source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands1")));
                 }
-                source.sendMessage(Component.text(plugin.getLocale().getString("HelpLink")));
+                source.sendMessage(deserialize(plugin.getLocale().getString("HelpLink")));
             } else if(args.length >= 3) {
                 if(args[0].equalsIgnoreCase("console") || args[0].equalsIgnoreCase("player")) {
                     String[] newArgs = new String[3];
@@ -54,13 +58,13 @@ public class SyncCommand implements SimpleCommand {
                         }
                     }
                     newArgs[2] = sb.toString();
-                    if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee")) {
+                    if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee") || args[1].equalsIgnoreCase("proxy")) {
                         makeData(newArgs, false, source);
                     } else {
                         makeData(newArgs, true, source);
                     }
                 } else {
-                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands9")));
+                    source.sendMessage(deserialize(plugin.getLocale().getString("HelpCommands9")));
                 }
             }
         }
@@ -80,14 +84,24 @@ public class SyncCommand implements SimpleCommand {
             } else {
                 message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
             }
-        } else if(args[0].equalsIgnoreCase("bungee")) {
+        } else if(args[0].equalsIgnoreCase("bungee") || args[0].equalsIgnoreCase("proxy")) {
             message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));
         } else {
             if(args[1].equalsIgnoreCase("all")) {
-                message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncPlayerAll"));
+                String command = args[2].replaceAll("\\+", " ");
+                if(!command.startsWith("/")) command = "/" + command;
+                source.sendMessage(deserialize(plugin.getLocale().getString("BungeeRanAll", command)));
+                for(Player player : plugin.getProxyServer().getAllPlayers()) player.spoofChatInput(command);
             } else {
-                message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncPlayer", args[1]));
+                Optional<Player> player = plugin.getProxyServer().getAllPlayers().stream().filter(p -> (args[1].equals(p.getUsername()))).findFirst();
+                String command = args[2].replaceAll("\\+", " ");
+                if(!command.startsWith("/")) command = "/" + command;
+                if(player.isPresent()) {
+                    player.get().spoofChatInput(command);
+                    source.sendMessage(deserialize(plugin.getLocale().getString("BungeeRanPlayerSingle", command, args[1])));
+                }
             }
+            return;
         }
         if(single) {
             data = args[0].toLowerCase() + plugin.spacer + "single" + plugin.spacer + args[2] + plugin.spacer + args[1];
@@ -95,7 +109,11 @@ public class SyncCommand implements SimpleCommand {
             data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
         }
         plugin.oq.add(data);
-        source.sendMessage(Component.text(message));
+        source.sendMessage(deserialize(message));
+    }
+
+    private Component deserialize(String string) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
     }
 
 }
