@@ -1,4 +1,4 @@
-package sawfowl.commandsyncserver.bungee;
+package sawfowl.commandsyncserver.velocity;
 
 import java.io.File;
 import java.io.FileReader;
@@ -12,7 +12,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
-import net.md_5.bungee.api.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 /**
  * Most likely, this is the final version of the class..  <br>
@@ -116,7 +118,7 @@ public class Locale {
     public String getString(final String key, final boolean removeColors, final String... args) {
         String out = this.locale.getProperty(key);
         if (out == null) {
-            return ChatColor.RED + "Key \"" + key + "\" not found!" + ChatColor.RESET;
+            return TextColor.fromHexString("#ff0000") + "Key \"" + key + "\" not found!" + TextColor.fromHexString("#ffffff");
         }
 
         MessageFormat mf = this.messageCache.get(out);
@@ -127,10 +129,10 @@ public class Locale {
         
         out = mf.format(args);
 
-        out = ChatColor.translateAlternateColorCodes('&', out);
-
         if (removeColors) {
-            out = ChatColor.stripColor(out);
+        	Component component = LegacyComponentSerializer.legacyAmpersand().deserialize(out);
+        	component.decorations().clear();
+            out = LegacyComponentSerializer.legacyAmpersand().serialize(component);
         }
         
         return out;

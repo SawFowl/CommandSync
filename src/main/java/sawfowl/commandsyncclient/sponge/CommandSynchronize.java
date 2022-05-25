@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandCause;
 import org.spongepowered.api.command.CommandCompletion;

@@ -1,48 +1,46 @@
-package sawfowl.commandsyncserver.bungee;
+package sawfowl.commandsyncserver.velocity;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.plugin.Command;
+import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 
-public class SyncCommand extends Command {
+import net.kyori.adventure.text.Component;
+
+public class SyncCommand implements SimpleCommand {
 
     private final CSS plugin;
     public SyncCommand(CSS css) {
-        super("proxysync");
         plugin = css;
     }
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if(!sender.hasPermission("sync.use")) {
-            sender.sendMessage(new TextComponent(plugin.getLocale().getString("NoPerm")));
-            return;
-        }
+	@Override
+	public void execute(Invocation invocation) {
+		CommandSource source = invocation.source();
+		String[] args = invocation.arguments();
         if(args.length >= 2 && args[0].equalsIgnoreCase("console") && args[1].equalsIgnoreCase("bungee")) {
-            sender.sendMessage(new TextComponent(plugin.getLocale().getString("CantUseArgProxyServer")));
+        	source.sendMessage(Component.text(plugin.getLocale().getString("CantUseArgProxyServer")));
             return;
         }
         if(args.length >= 0) {
             if(args.length <= 2) {
-                sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpAuthors")));
+                source.sendMessage(Component.text(plugin.getLocale().getString("HelpAuthors")));
                 if(args.length >= 1) {
                     if(args[0].equalsIgnoreCase("console")){
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands9", "proxysync")));
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands8", "proxysync")));
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands7", "proxysync")));
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands6", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands9", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands8", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands7", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands6", "proxysync")));
                     } else if(args[0].equalsIgnoreCase("player")) {
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands5", "proxysync")));
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands4", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands5", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands4", "proxysync")));
                     } else {
-                        sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands10", "proxysync")));
+                        source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands10", "proxysync")));
                     }
                 } else {
-                    sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands3", "proxysync")));
-                    sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands2", "proxysync")));
-                    sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands1")));
+                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands3", "proxysync")));
+                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands2", "proxysync")));
+                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands1")));
                 }
-                sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpLink")));
+                source.sendMessage(Component.text(plugin.getLocale().getString("HelpLink")));
             } else if(args.length >= 3) {
                 if(args[0].equalsIgnoreCase("console") || args[0].equalsIgnoreCase("player")) {
                     String[] newArgs = new String[3];
@@ -57,18 +55,23 @@ public class SyncCommand extends Command {
                     }
                     newArgs[2] = sb.toString();
                     if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee")) {
-                        makeData(newArgs, false, sender);
+                        makeData(newArgs, false, source);
                     } else {
-                        makeData(newArgs, true, sender);
+                        makeData(newArgs, true, source);
                     }
                 } else {
-                    sender.sendMessage(new TextComponent(plugin.getLocale().getString("HelpCommands9")));
+                    source.sendMessage(Component.text(plugin.getLocale().getString("HelpCommands9")));
                 }
             }
         }
-    }
+	}
 
-    private void makeData(String[] args, Boolean single, CommandSender sender) {
+	@Override
+	public boolean hasPermission(final Invocation invocation) {
+		return invocation.source().hasPermission("sync.use");    
+	}
+
+    private void makeData(String[] args, Boolean single, CommandSource source) {
         String data;
         String message;
         if(args[0].equalsIgnoreCase("console")) {
@@ -92,7 +95,7 @@ public class SyncCommand extends Command {
             data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
         }
         plugin.oq.add(data);
-        sender.sendMessage(new TextComponent(message));
+        source.sendMessage(Component.text(message));
     }
 
 }
