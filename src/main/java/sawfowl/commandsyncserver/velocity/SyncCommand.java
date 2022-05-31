@@ -79,7 +79,10 @@ public class SyncCommand implements SimpleCommand {
         String data;
         String message;
         if(args[0].equalsIgnoreCase("console")) {
-            if(args[1].equalsIgnoreCase("all")) {
+            if(args[1].equalsIgnoreCase("player")) {
+                String playerName = args[2].split("\\+")[0];
+                message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " ").replaceFirst(playerName + " ", ""),  plugin.getLocale().getString("SyncConsolePlayer", playerName));
+            } else if(args[1].equalsIgnoreCase("all")) {
                 message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsoleAll"));
             } else {
                 message = plugin.getLocale().getString("SyncingCommand", args[2].replaceAll("\\+", " "),  plugin.getLocale().getString("SyncConsole", args[1]));

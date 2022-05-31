@@ -198,40 +198,17 @@ public class Locale {
      * @is - Localization file name + .properties
      */
 	private boolean saveLocale(final String name) {
-        if (this.localeFile.exists()) {
-            return true;
-        }
-        File enFile = new File(plugin.configDir + File.separator + "en_US.properties");
-        String is = "/" + name + ".properties";
-        if (getClass().getResource(is) == null) {
-	    	plugin.getLogger().error("Failed to save \"" + name + ".properties \"");
-            if (!enFile.exists()){
-            try {
-                URI u = getClass().getResource("/en_US.properties").toURI();
-                FileSystem jarFS = FileSystems.newFileSystem(URI.create(u.toString().split("!")[0]), new HashMap<>());
-    			Files.copy(jarFS.getPath(u.toString().split("!")[1]), new File(plugin.configDir + File.separator + "en_US.properties").toPath());
-    	        jarFS.close();
-    		} catch (IOException ex) {
-    	    	plugin.getLogger().error("Failed to save \"" + name + ".properties \"", ex);
-    		} catch (URISyntaxException e) {
-    	    	plugin.getLogger().error("Locale \"" + name + "\" does not exists!");
-    		}
-            return false;
+        String configTypeName = ".properties";
+        plugin.getContainer().openResource(URI.create(File.separator + name + configTypeName)).ifPresent(inputStream -> {
+            if(!localeFile.exists()) {
+                try {
+                    Files.copy(inputStream, new File(plugin.configDir + File.separator + name + ".properties").toPath());
+                } catch (IOException e) {
+                    plugin.getLogger().error("Failed to save \"" + name + ".properties \n \"", e.getLocalizedMessage());
+                    if(!name.equals("en_US")) saveLocale("en_US");
+                }
             }
-            return false;
-        } else {    
-        try {
-            URI u = getClass().getResource(is).toURI();
-            FileSystem jarFS = FileSystems.newFileSystem(URI.create(u.toString().split("!")[0]), new HashMap<>());
-	    	plugin.getLogger().error("Failed to save \"" + name + ".properties \"");
-			Files.copy(jarFS.getPath(u.toString().split("!")[1]), new File(plugin.configDir + File.separator + name + ".properties").toPath());
-	        jarFS.close();
-		} catch (IOException ex) {
-	    	plugin.getLogger().error("Failed to save \"" + name + ".properties \"", ex);
-		} catch (URISyntaxException e) {
-	    	plugin.getLogger().error("Locale \"" + name + "\" does not exists!");
-		}	
-        }
+        });
         return true;
     }
 }
