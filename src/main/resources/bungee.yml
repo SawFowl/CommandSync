@@ -1,5 +1,5 @@
 name: CommandSync
 main: sawfowl.commandsyncserver.bungee.CSS
-version: 2.8.1
+version: 2.8.2
 author: YoFuzzy3
 description: Synchronize commands across servers.

@@ -122,7 +122,7 @@ public class ClientHandler extends Thread {
 						String output = plugin.oq.get(i);
 						String[] data = output.split(plugin.spacer);
 						boolean playerFilter = data.length > 3 && data[0].equals("console") && data[data.length - 1].equals("player") && output.contains("+");
-						String playerName = playerFilter ? data[2].replace('+', '@').split("@")[0] : "";
+						String playerName = playerFilter ? data[2].split("\\+")[0] : "";
 						Optional<Player> player = playerFilter ? plugin.getProxyServer().getAllPlayers().stream().filter(p -> (playerName.equals(p.getUsername()))).findFirst() : Optional.empty();
 						boolean singlePlayer = player.isPresent() && player.get().isActive() && player.get().getCurrentServer().isPresent() && player.get().getCurrentServer().get().getServerInfo().getName().equals(name);
 						boolean single = data[1].equals("single") || singlePlayer;
