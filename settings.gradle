@@ -1,1 +1,66 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		mavenCentral()
+		mavenLocal()
+
+		// Fabric
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+
+		// Legacy Fabric
+		maven {
+			name = "legacy-fabric"
+			url = "https://repo.legacyfabric.net/repository/legacyfabric/"
+		}
+
+		// Forge
+		maven {
+			name = 'Forge'
+			url = 'https://maven.minecraftforge.net/'
+		}
+
+		// NeoForge
+		maven {
+			name = 'NeoForge'
+			url 'https://maven.neoforged.net/releases'
+		}
+
+		// Parchment Mappings
+		maven {
+			name = 'ParchmentMC'
+			url = 'https://maven.parchmentmc.org'
+		}
+
+		// Sponge
+		maven {
+			name = 'Sponge'
+			url = 'https://repo.spongepowered.org/maven'
+		}
+
+		maven {
+			name = 'sponge-repo'
+			url = 'https://repo.spongepowered.org/repository/maven-public/'
+		}
+
+		// RetroFuturaGradle
+		maven {
+			name = "GTNH Maven"
+			url = uri("http://jenkins.usrv.eu:8081/nexus/content/groups/public/")
+			allowInsecureProtocol = true
+			mavenContent {
+				includeGroup("com.gtnewhorizons")
+				includeGroup("com.gtnewhorizons.retrofuturagradle")
+			}
+		}
+	}
+}
+
+plugins {
+	// Automatic toolchain provisioning
+	id("org.gradle.toolchains.foojay-resolver-convention") version("0.5.0")
+}
+
 rootProject.name = 'CommandSync'

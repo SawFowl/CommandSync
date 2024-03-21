@@ -1,23 +1,21 @@
 plugins {
 	id("java")
-	id("java-library")
-	id("org.spongepowered.gradle.vanilla") version "0.2"
+	id("eclipse")
+	id("org.spongepowered.gradle.plugin") version "2.0.2"
 }
 
 group = "sawfowl"
 version = "${major}.${minor}.${patch}-${suffix}"
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
 	mavenCentral()
 	maven {
 		name = "Sponge"
-		url = "https://repo.spongepowered.org/maven"
-		allowInsecureProtocol = true
+		url = "https://repo.spongepowered.org/repository/maven-public/"
 	}
 	maven {
 		name = 'Bukkit'
@@ -37,19 +35,41 @@ tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
-minecraft {
-	version("1.16.5")
-
-	runs {
-		server()
-		client()
-	}
+dependencies {
+	implementation "org.spongepowered:spongeapi:${api}"
+	implementation "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
+	implementation "net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT"
+	implementation 'com.velocitypowered:velocity-api:3.1.1'
+	annotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
 }
 
-dependencies {
-	implementation "org.spongepowered:spongeapi:${spongeapi}"
-	implementation "org.bukkit:bukkit:1.14.4-R0.1-SNAPSHOT"
-	implementation "net.md-5:bungeecord-api:1.14-SNAPSHOT"
-	implementation 'com.velocitypowered:velocity-api:3.0.1'
-	annotationProcessor 'com.velocitypowered:velocity-api:3.0.1'
+sponge {
+	apiVersion("${api}")
+	loader {
+		name("java_plain")
+		version("1.0")
+	}
+	license("GNU")
+	plugin("commandsync") {
+		displayName(project.name.capitalize())
+		version("${major}.${minor}.${patch}-API10")
+		entrypoint("sawfowl.commandsyncclient.sponge.CSC")
+		description("Synchronize commands across servers.")
+		contributor("SawFowl") {
+			description("Fork Developer")
+		}
+		contributor("YoFuzzy3") {
+			description("Author")
+		}
+		links {
+			homepage("https://discord.gg/7xnZGSYJH9")
+			source("https://github.com/SawFowl/CommandSync")
+			issues("https://discord.gg/7xnZGSYJH9")
+		}
+		dependency("spongeapi") {
+			optional(false)
+			loadOrder("after")
+			version("${api}")
+		}
+	}
 }
