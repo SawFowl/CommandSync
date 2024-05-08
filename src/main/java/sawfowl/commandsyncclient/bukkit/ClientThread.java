@@ -61,11 +61,11 @@ public class ClientThread extends Thread {
 								if(data[0].equals("console")) {
 									String command = data[2].replaceAll("\\+", " ");
 									Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-							            @Override
-							            public void run() {
+										@Override
+										public void run() {
 											Bukkit.getServer().dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
-							            }
-							        }, 0);
+										}
+									}, 0);
 									Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("RanCommand", command));
 								}
 							}
@@ -100,21 +100,21 @@ public class ClientThread extends Thread {
 			out.println(name);
 			if(in.readLine().equals("n")) {
 				Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("NameError", name));
-			    socket.close();
-			    return;
+				socket.close();
+				return;
 			}
 			out.println(pass);
 			if(in.readLine().equals("n")) {
 				Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("InvalidPassword"));
-			    socket.close();
+				socket.close();
 				return;
 			}
-            out.println(version);
-            if(in.readLine().equals("n")) {
-            	Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("VersionError", version, in.readLine()));
-                socket.close();
-                return;
-            }
+			out.println(version);
+			if(in.readLine().equals("n")) {
+				Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("VersionError", version, in.readLine()));
+				socket.close();
+				return;
+			}
 			connected = true;
 			Bukkit.getConsoleSender().sendMessage(plugin.getLocale().getString("ConnectInfo", ip.getHostName(), String.valueOf(port), name));
 		} catch(IOException e) {

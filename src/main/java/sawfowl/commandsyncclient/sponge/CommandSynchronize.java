@@ -56,21 +56,21 @@ public class CommandSynchronize implements Command.Raw {
 				cause.audience().sendMessage(plugin.getLocale().getComponent("HelpLink"));
 			} else if(args.length >= 3) {
 				if(args[0].equalsIgnoreCase("console") || args[0].equalsIgnoreCase("player")) {
-				    String[] newArgs = new String[3];
-				    newArgs[0] = args[0];
-				    newArgs[1] = args[1];
-				    StringBuilder sb = new StringBuilder();
-				    for(int i = 2; i < args.length; i++) {
-				        sb.append(args[i]);
-				        if(i < args.length - 1) {
-				            sb.append("+");
-				        }
-				    }
-				    newArgs[2] = sb.toString();
+					String[] newArgs = new String[3];
+					newArgs[0] = args[0];
+					newArgs[1] = args[1];
+					StringBuilder sb = new StringBuilder();
+					for(int i = 2; i < args.length; i++) {
+						sb.append(args[i]);
+						if(i < args.length - 1) {
+							sb.append("+");
+						}
+					}
+					newArgs[2] = sb.toString();
 					if(args[1].equalsIgnoreCase("all") || args[1].equalsIgnoreCase("bungee") || args[1].equalsIgnoreCase("proxy")) {
 						makeData(newArgs, false, cause);
 					} else {
-					    makeData(newArgs, true, cause);
+						makeData(newArgs, true, cause);
 					}
 				} else {
 					cause.audience().sendMessage(plugin.getLocale().getComponent("HelpCommands9"));
@@ -135,9 +135,9 @@ public class CommandSynchronize implements Command.Raw {
 			}
 		}
 		if(single) {
-		    data = args[0].toLowerCase() + plugin.spacer + "single" + plugin.spacer + args[2] + plugin.spacer + args[1];
+			data = args[0].toLowerCase() + plugin.spacer + "single" + plugin.spacer + args[2] + plugin.spacer + args[1];
 		} else {
-		    data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
+			data = args[0].toLowerCase() + plugin.spacer + args[1].toLowerCase() + plugin.spacer + args[2];
 		}
 		plugin.oq.add(data);
 		cause.audience().sendMessage(deserialize(message));

@@ -20,10 +20,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.google.inject.Inject;
+
 import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -32,6 +30,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import sawfowl.commandsyncserver.velocity.Metrics.Graph;
+import sawfowl.logger.Logger;
 
 @Plugin(
 		id = PluginInfo.ID, 
@@ -74,7 +73,7 @@ public class CSS {
 	@Inject
 	public CSS(ProxyServer server, @DataDirectory Path dataDirectory) {
 		this.proxyServer = server;
-		logger = LogManager.getLogger("CommandSync");
+		logger = Logger.getLogger("CommandSyncServer");
 		fileDirectory = dataDirectory.toFile();
 	}
 

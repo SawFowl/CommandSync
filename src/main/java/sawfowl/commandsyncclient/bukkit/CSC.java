@@ -48,7 +48,7 @@ public class CSC extends JavaPlugin {
 	
 	public void onDisable() {
 		saveData();
-        debugger.close();
+		debugger.close();
 		loc = null;
 	}
 	
@@ -59,14 +59,14 @@ public class CSC extends JavaPlugin {
 	private void workData() throws IOException {
 		File folder = getDataFolder();
 		File data = new File(folder + File.separator + "data.txt");
-        boolean remove = this.remove;
-        if (remove == true) {
-        	if(data.delete()){
-        		Bukkit.getConsoleSender().sendMessage(loc.getString("DataRemoved"));
+		boolean remove = this.remove;
+		if (remove == true) {
+			if(data.delete()){
+				Bukkit.getConsoleSender().sendMessage(loc.getString("DataRemoved"));
 			} else Bukkit.getConsoleSender().sendMessage(loc.getString("DataRemoveNotFound"));
-        } else {
-    		loadData();
-        }
+		} else {
+			loadData();
+		}
 	}
 
 	public String[] loadConfig() {
@@ -74,42 +74,42 @@ public class CSC extends JavaPlugin {
 			"ip=localhost", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
-        try {
-            File folder = getDataFolder();
-            if(!folder.exists()) {
-                folder.mkdir();
-            }
-            File file = new File(folder, "config.txt");
-            if(!file.exists()) {
-                file.createNewFile();
-            }
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            for(int i = 0; i < defaults.length; i++) {
-                String l = br.readLine();
-                if(l == null || l.isEmpty()) {
-                    data[i] = defaults[i].split("=")[1];
-                } else {
-                    data[i] = l.split("=")[1];
-                    defaults[i] = l;
-                }
-            }
-            br.close();
-            file.delete();
-            file.createNewFile();
-            PrintStream ps = new PrintStream(new FileOutputStream(file));
-            for(int i = 0; i < defaults.length; i++) {
-                ps.println(defaults[i]);
-            }
-            ps.close();
-            debugger = new Debugger(this, Boolean.valueOf(data[5]));
-            remove = Boolean.valueOf(data[6]);
-    		loc = new Locale(this, String.valueOf(data[7]));
-    		loc.init();
-    		Bukkit.getConsoleSender().sendMessage(loc.getString("ConfigLoaded"));
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        return data;
+		try {
+			File folder = getDataFolder();
+			if(!folder.exists()) {
+				folder.mkdir();
+			}
+			File file = new File(folder, "config.txt");
+			if(!file.exists()) {
+				file.createNewFile();
+			}
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			for(int i = 0; i < defaults.length; i++) {
+				String l = br.readLine();
+				if(l == null || l.isEmpty()) {
+					data[i] = defaults[i].split("=")[1];
+				} else {
+					data[i] = l.split("=")[1];
+					defaults[i] = l;
+				}
+			}
+			br.close();
+			file.delete();
+			file.createNewFile();
+			PrintStream ps = new PrintStream(new FileOutputStream(file));
+			for(int i = 0; i < defaults.length; i++) {
+				ps.println(defaults[i]);
+			}
+			ps.close();
+			debugger = new Debugger(this, Boolean.valueOf(data[5]));
+			remove = Boolean.valueOf(data[6]);
+			loc = new Locale(this, String.valueOf(data[7]));
+			loc.init();
+			Bukkit.getConsoleSender().sendMessage(loc.getString("ConfigLoaded"));
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 	
 	private void saveData() {
@@ -147,7 +147,7 @@ public class CSC extends JavaPlugin {
 					br.close();
 				}
 			} else {
-			    Bukkit.getConsoleSender().sendMessage(loc.getString("DataNotfound"));
+				Bukkit.getConsoleSender().sendMessage(loc.getString("DataNotfound"));
 			}
 		} catch(IOException e) {
 			e.printStackTrace();

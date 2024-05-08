@@ -17,12 +17,12 @@ public class ClientHandler extends Thread {
 
 	private CSS plugin;
 	private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
-    private Integer heartbeat = 0;
-    private String name;
-    private String pass;
-    private String version = "2.5";
+	private PrintWriter out;
+	private BufferedReader in;
+	private Integer heartbeat = 0;
+	private String name;
+	private String pass;
+	private String version = "2.5";
 
 	public ClientHandler(CSS plugin, Socket socket, Integer heartbeat, String pass) throws IOException {
 		this.plugin = plugin;
@@ -35,9 +35,9 @@ public class ClientHandler extends Thread {
 		name = in.readLine();
 		if(plugin.c.contains(name)) {
 			plugin.getLoger().info(plugin.getLocale().getString("NameErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));
-		    out.println("n");
-		    socket.close();
-		    return;
+			out.println("n");
+			socket.close();
+			return;
 		}
 		out.println("y");
 		if(!in.readLine().equals(this.pass)) {
@@ -50,14 +50,14 @@ public class ClientHandler extends Thread {
 		String version = in.readLine();
 		if(!version.equals(this.version)) {
 			plugin.getLoger().info(plugin.getLocale().getString("VersionErrorBungee", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name, version, this.version));
-		    out.println("n");
-		    out.println(this.version);
-		    socket.close();
-		    return;
+			out.println("n");
+			out.println(this.version);
+			socket.close();
+			return;
 		}
 		out.println("y");
 		if(!plugin.qc.containsKey(name)) {
-		    plugin.qc.put(name, 0);
+			plugin.qc.put(name, 0);
 		}
 		plugin.c.add(name);
 		plugin.getLoger().info(plugin.getLocale().getString("ConnectFrom", socket.getInetAddress().getHostName(), String.valueOf(socket.getPort()), name));

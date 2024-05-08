@@ -33,182 +33,182 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
  */
 public class Locale {
 
-    private final HashMap<String, MessageFormat> messageCache = new HashMap<>();
-    private final Properties locale = new Properties();
-    private File localeFile;
-    private String loc;
+	private final HashMap<String, MessageFormat> messageCache = new HashMap<>();
+	private final Properties locale = new Properties();
+	private File localeFile;
+	private String loc;
 
-    CSC plugin;
-    public Locale(CSC plugin, String string) {
-    	this.plugin = plugin;
-    	loc = string;
-    }
+	CSC plugin;
+	public Locale(CSC plugin, String string) {
+		this.plugin = plugin;
+		loc = string;
+	}
 
-    /**
-     * Initializing the class. Must be called first. <br>
-     * Otherwise, you will receive Key "key" does not exists!
-     */
-    public void init() throws IOException {
-        this.locale.clear();
-        String loc = this.loc;
-        this.localeFile = new File(plugin.configDir, loc + ".properties");
-        if (this.saveLocale(loc)) {
-		    try (FileReader fr = new FileReader(this.localeFile)) {
-		        this.locale.load(fr);
-		    } catch (Exception ex) {
-		    	plugin.getLogger().error("Failed to load " + loc + " locale!", ex);
-		    }
+	/**
+	 * Initializing the class. Must be called first. <br>
+	 * Otherwise, you will receive Key "key" does not exists!
+	 */
+	public void init() throws IOException {
+		this.locale.clear();
+		String loc = this.loc;
+		this.localeFile = new File(plugin.configDir, loc + ".properties");
+		if (this.saveLocale(loc)) {
+			try (FileReader fr = new FileReader(this.localeFile)) {
+				this.locale.load(fr);
+			} catch (Exception ex) {
+				plugin.getLogger().error("Failed to load " + loc + " locale!", ex);
+			}
 		} else {
-		    try {
-		        this.locale.load(getClass().getResourceAsStream("/en_US.properties"));
-		    } catch (IOException ex) {
-		    	plugin.getLogger().error("Failed to load en_US locale!", ex);
-		    }
+			try {
+				this.locale.load(getClass().getResourceAsStream("/en_US.properties"));
+			} catch (IOException ex) {
+				plugin.getLogger().error("Failed to load en_US locale!", ex);
+			}
 		}
-    }
+	}
 
-    /**
-     * Receiving a message from the configuration <br>
-     * Example message: "There is so many players." <br>
-     * Example call: getString("key");
-     *
-     * @param key - message key
-     * @return message, otherwise null
-     */
-    public Component getComponent(final String key) {
-        return getComponent(key, false, "");
-    }
+	/**
+	 * Receiving a message from the configuration <br>
+	 * Example message: "There is so many players." <br>
+	 * Example call: getString("key");
+	 *
+	 * @param key - message key
+	 * @return message, otherwise null
+	 */
+	public Component getComponent(final String key) {
+		return getComponent(key, false, "");
+	}
 
-    /**
-     * Receiving a message with arguments from the configuration <br>
-     * Example message: "There is {0} players: {1}." <br>
-     * Example call: getString("key", "2", "You, Me");
-     *
-     * @param key - message key
-     * @param args - arguments of the message. Only String format.
-     * @return message, otherwise null
-     */
-    public Component getComponent(final String key, final String... args) {
-        return this.getComponent(key, false, args);
-    }
+	/**
+	 * Receiving a message with arguments from the configuration <br>
+	 * Example message: "There is {0} players: {1}." <br>
+	 * Example call: getString("key", "2", "You, Me");
+	 *
+	 * @param key - message key
+	 * @param args - arguments of the message. Only String format.
+	 * @return message, otherwise null
+	 */
+	public Component getComponent(final String key, final String... args) {
+		return this.getComponent(key, false, args);
+	}
 
-    /**
-     * Receiving a message with arguments from the configuration <br>
-     * Example message: "There is {0} players: {1}." <br>
-     * Example call: getString("key", "2", "You, Me");
-     *
-     * @param key - message key
-     * @param args - arguments of the message. Only String format.
-     * @return message, otherwise null
-     */
-    public String getString(final String key, final String... args) {
-        return this.getString(key, false, args);
-    }
+	/**
+	 * Receiving a message with arguments from the configuration <br>
+	 * Example message: "There is {0} players: {1}." <br>
+	 * Example call: getString("key", "2", "You, Me");
+	 *
+	 * @param key - message key
+	 * @param args - arguments of the message. Only String format.
+	 * @return message, otherwise null
+	 */
+	public String getString(final String key, final String... args) {
+		return this.getString(key, false, args);
+	}
 
-    /**
-     * Receiving a message from a configuration with the ability to filter color <br>
-     * Example message: "\u00a76There is so many players." <br>
-     * Example call: getString("key", false);
-     *
-     * @param key - message key
-     * @param removeColors if true, then the colors will be removed
-     * @return message, otherwise null
-     */
-    public Component getComponent(final String key, final boolean removeColors) {
-        return this.getComponent(key, removeColors, "");
-    }
+	/**
+	 * Receiving a message from a configuration with the ability to filter color <br>
+	 * Example message: "\u00a76There is so many players." <br>
+	 * Example call: getString("key", false);
+	 *
+	 * @param key - message key
+	 * @param removeColors if true, then the colors will be removed
+	 * @return message, otherwise null
+	 */
+	public Component getComponent(final String key, final boolean removeColors) {
+		return this.getComponent(key, removeColors, "");
+	}
 
-    /**
-     * Receiving a message from a configuration with the ability to filter color <br>
-     * Example message: "\u00a76There is so many players." <br>
-     * Example call: getString("key", false);
-     *
-     * @param key - message key
-     * @param removeColors if true, then the colors will be removed
-     * @return message, otherwise null
-     */
-    public String getString(final String key, final boolean removeColors) {
-        return getString(key, removeColors, "");
-    }
+	/**
+	 * Receiving a message from a configuration with the ability to filter color <br>
+	 * Example message: "\u00a76There is so many players." <br>
+	 * Example call: getString("key", false);
+	 *
+	 * @param key - message key
+	 * @param removeColors if true, then the colors will be removed
+	 * @return message, otherwise null
+	 */
+	public String getString(final String key, final boolean removeColors) {
+		return getString(key, removeColors, "");
+	}
 
-    /**
-     * Receiving a message with arguments from a configuration with the ability to filter the color <br>
-     * Example message: "\u00a76There is \u00a7c{0} \u00a76players:\u00a7c {1}." <br>
-     * Example call: getString("key", false, "2", "You, Me"); <br>
-     *
-     * @param key - message key
-     * @param removeColors - if true, then the colors will be removed
-     * @param args - arguments of the message. Only String format.
-     * @return message, otherwise null
-     */
-    public String getString(final String key, final boolean removeColors, final String... args) {
-        String out = this.locale.getProperty(key);
-        if (out == null) {
-            return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r"));
-        }
-        MessageFormat mf = this.messageCache.get(out);
-        if (mf == null) {
-            mf = new MessageFormat(out);
-            this.messageCache.put(out, mf);
-        }
-        out = mf.format(args);
-        if (removeColors) {
-            return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build()));
-        }
-        return out;
-    }
+	/**
+	 * Receiving a message with arguments from a configuration with the ability to filter the color <br>
+	 * Example message: "\u00a76There is \u00a7c{0} \u00a76players:\u00a7c {1}." <br>
+	 * Example call: getString("key", false, "2", "You, Me"); <br>
+	 *
+	 * @param key - message key
+	 * @param removeColors - if true, then the colors will be removed
+	 * @param args - arguments of the message. Only String format.
+	 * @return message, otherwise null
+	 */
+	public String getString(final String key, final boolean removeColors, final String... args) {
+		String out = this.locale.getProperty(key);
+		if (out == null) {
+			return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r"));
+		}
+		MessageFormat mf = this.messageCache.get(out);
+		if (mf == null) {
+			mf = new MessageFormat(out);
+			this.messageCache.put(out, mf);
+		}
+		out = mf.format(args);
+		if (removeColors) {
+			return LegacyComponentSerializer.legacyAmpersand().serialize(LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build()));
+		}
+		return out;
+	}
 
-    /**
-     * Receiving a message with arguments from a configuration with the ability to filter the color <br>
-     * Example message: "\u00a76There is \u00a7c{0} \u00a76players:\u00a7c {1}." <br>
-     * Example call: getString("key", false, "2", "You, Me"); <br>
-     *
-     * @param key - message key
-     * @param removeColors - if true, then the colors will be removed
-     * @param args - arguments of the message. Only String format.
-     * @return message, otherwise null
-     */
-    public Component getComponent(final String key, final boolean removeColors, final String... args) {
-        String out = this.locale.getProperty(key);
-        if (out == null) {
-        	return LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r");
-        }
-        MessageFormat mf = this.messageCache.get(out);
-        if (mf == null) {
-            mf = new MessageFormat(out);
-            this.messageCache.put(out, mf);
-        }
-        out = mf.format(args);
-        if (removeColors) {
-            return LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build());
-        }
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(out);
-    }
-    
-    /**
-     * Saving the localization file. <br>
-     * The choice of a specific localization is determined by
-     * the parameter in the main configuration file. <br>
-     * If the selected localization does not exist, 
-     * the default file will be saved(en_US.properties). <br>
-     * The path to the localization file can be changed. <br>
-     * 
-     * @path - The path to the localization file in the *.jar file. <br>
-     * @name - The name of the localization file specified in the main configuration file. <br>
-     * @is - Localization file name + .properties
-     */
+	/**
+	 * Receiving a message with arguments from a configuration with the ability to filter the color <br>
+	 * Example message: "\u00a76There is \u00a7c{0} \u00a76players:\u00a7c {1}." <br>
+	 * Example call: getString("key", false, "2", "You, Me"); <br>
+	 *
+	 * @param key - message key
+	 * @param removeColors - if true, then the colors will be removed
+	 * @param args - arguments of the message. Only String format.
+	 * @return message, otherwise null
+	 */
+	public Component getComponent(final String key, final boolean removeColors, final String... args) {
+		String out = this.locale.getProperty(key);
+		if (out == null) {
+			return LegacyComponentSerializer.legacyAmpersand().deserialize("&4Key \"" + key + "\" not found!&r");
+		}
+		MessageFormat mf = this.messageCache.get(out);
+		if (mf == null) {
+			mf = new MessageFormat(out);
+			this.messageCache.put(out, mf);
+		}
+		out = mf.format(args);
+		if (removeColors) {
+			return LegacyComponentSerializer.legacyAmpersand().deserialize(out).style(Style.style().build()).style(Style.style().build());
+		}
+		return LegacyComponentSerializer.legacyAmpersand().deserialize(out);
+	}
+	
+	/**
+	 * Saving the localization file. <br>
+	 * The choice of a specific localization is determined by
+	 * the parameter in the main configuration file. <br>
+	 * If the selected localization does not exist, 
+	 * the default file will be saved(en_US.properties). <br>
+	 * The path to the localization file can be changed. <br>
+	 * 
+	 * @path - The path to the localization file in the *.jar file. <br>
+	 * @name - The name of the localization file specified in the main configuration file. <br>
+	 * @is - Localization file name + .properties
+	 */
 	private boolean saveLocale(final String name) {
-        String configTypeName = ".properties";
-        plugin.getContainer().openResource(URI.create(File.separator + name + configTypeName)).ifPresent(inputStream -> {
-            if(!localeFile.exists()) {
-                try {
-                    Files.copy(inputStream, new File(plugin.configDir + File.separator + name + ".properties").toPath());
-                } catch (IOException e) {
-                    plugin.getLogger().error("Failed to save \"" + name + ".properties \n \"", e.getLocalizedMessage());
-                    if(!name.equals("en_US")) saveLocale("en_US");
-                }
-            }
-        });
-        return true;
-    }
+		String configTypeName = ".properties";
+		plugin.getContainer().openResource(URI.create(File.separator + name + configTypeName)).ifPresent(inputStream -> {
+			if(!localeFile.exists()) {
+				try {
+					Files.copy(inputStream, new File(plugin.configDir + File.separator + name + ".properties").toPath());
+				} catch (IOException e) {
+					plugin.getLogger().error("Failed to save \"" + name + ".properties \n \"", e.getLocalizedMessage());
+					if(!name.equals("en_US")) saveLocale("en_US");
+				}
+			}
+		});
+		return true;
+	}
 }

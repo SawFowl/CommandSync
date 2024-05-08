@@ -37,8 +37,8 @@ tasks.withType(JavaCompile) {
 
 dependencies {
 	implementation "org.spongepowered:spongeapi:${api}"
-	implementation "org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT"
-	implementation "net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT"
+	implementation "org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT"
+	implementation "net.md-5:bungeecord-api:1.20-R0.2"
 	implementation 'com.velocitypowered:velocity-api:3.1.1'
 	annotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
 }

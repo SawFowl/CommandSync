@@ -107,21 +107,21 @@ public class ClientThread extends Thread {
 			out.println(name);
 			if(in.readLine().equals("n")) {
 				plugin.getLogger().error(plugin.getLocale().getString("NameError", true, name));
-			    socket.close();
-			    return;
+				socket.close();
+				return;
 			}
 			out.println(pass);
 			if(in.readLine().equals("n")) {
 				plugin.getLogger().error(plugin.getLocale().getString("InvalidPassword", true));
-			    socket.close();
+				socket.close();
 				return;
 			}
-            out.println(version);
-            if(in.readLine().equals("n")) {
+			out.println(version);
+			if(in.readLine().equals("n")) {
 				plugin.getLogger().error(plugin.getLocale().getString("VersionError", true, version, in.readLine()));
-                socket.close();
-                return;
-            }
+				socket.close();
+				return;
+			}
 			connected = true;
 			plugin.getLogger().info((plugin.getLocale().getString("ConnectInfo", true, ip.getHostName(), String.valueOf(port), name)));
 		} catch(IOException e) {

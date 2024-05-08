@@ -19,12 +19,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import sawfowl.commandsyncserver.bungee.Metrics.Graph;
+import sawfowl.logger.Logger;
 
 public class CSS extends Plugin {
 
@@ -48,7 +46,7 @@ public class CSS extends Plugin {
 	}
 
 	public void onEnable() {
-		logger = LogManager.getLogger("CommandSync");
+		logger = Logger.getLogger("CommandSyncServer");
 		String[] data = loadConfig();
 		if(data[3].equals("UNSET")) {
 			logger.warn(loc.getString("UnsetValues"));
@@ -67,9 +65,9 @@ public class CSS extends Plugin {
 			e1.printStackTrace();
 		}
 		try {
-		    Metrics metrics = new Metrics(this);
-		    Graph graph1 = metrics.createGraph("Total queries sent");
-		    graph1.addPlotter(new Metrics.Plotter() {
+			Metrics metrics = new Metrics(this);
+			Graph graph1 = metrics.createGraph("Total queries sent");
+			graph1.addPlotter(new Metrics.Plotter() {
 				public int getValue() {
 					return oq.size();
 				}
@@ -77,8 +75,8 @@ public class CSS extends Plugin {
 					return "Total queries sent";
 				}
 			});
-		    Graph graph2 = metrics.createGraph("Total servers linked");
-		    graph2.addPlotter(new Metrics.Plotter() {
+			Graph graph2 = metrics.createGraph("Total servers linked");
+			graph2.addPlotter(new Metrics.Plotter() {
 				public int getValue() {
 					return qc.keySet().size();
 				}
@@ -86,8 +84,8 @@ public class CSS extends Plugin {
 					return "Total servers linked";
 				}
 			});
-		    metrics.start();
-		    getProxy().getPluginManager().registerListener(this, new EventListener(this));
+			metrics.start();
+			getProxy().getPluginManager().registerListener(this, new EventListener(this));
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -97,14 +95,14 @@ public class CSS extends Plugin {
 	private void workData() throws IOException {
 		File folder = getDataFolder();
 		File data = new File(folder + File.separator + "data.txt");
-        boolean remove = this.remove;
-        if (remove == true) {
-        	if(data.delete()) {
-    			logger.info(loc.getString("DataRemoved"));
+		boolean remove = this.remove;
+		if (remove == true) {
+			if(data.delete()) {
+				logger.info(loc.getString("DataRemoved"));
 			} else logger.info(loc.getString("DataRemoveNotFound")); 
-        } else {
-    		loadData();
-        }
+		} else {
+			loadData();
+		}
 	}
 	
 	public void onDisable() {
@@ -118,36 +116,36 @@ public class CSS extends Plugin {
 		};
 		String[] data = new String[defaults.length];
 		try {
-		    File folder = getDataFolder();
-		    if(!folder.exists()) {
-		        folder.mkdir();
-		    }
+			File folder = getDataFolder();
+			if(!folder.exists()) {
+				folder.mkdir();
+			}
 			File file = new File(folder, "config.txt");
 			if(!file.exists()) {
 				file.createNewFile();
 			}
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			for(int i = 0; i < defaults.length; i++) {
-			    String l = br.readLine();
-			    if(l == null || l.isEmpty()) {
-			        data[i] = defaults[i].split("=")[1];
-			    } else {
-			        data[i] = l.split("=")[1];
-			        defaults[i] = l;
-			    }
+				String l = br.readLine();
+				if(l == null || l.isEmpty()) {
+					data[i] = defaults[i].split("=")[1];
+				} else {
+					data[i] = l.split("=")[1];
+					defaults[i] = l;
+				}
 			}
-	        br.close();
-	        file.delete();
-	        file.createNewFile();
+			br.close();
+			file.delete();
+			file.createNewFile();
 			PrintStream ps = new PrintStream(new FileOutputStream(file));
 			for(int i = 0; i < defaults.length; i++) {
 				ps.println(defaults[i]);
 			}
 			ps.close();
 			debugger = new Debugger(this, Boolean.valueOf(data[4]));
-            remove = Boolean.valueOf(data[5]);
-    		loc = new Locale(this, String.valueOf(data[6]));
-    		loc.init();
+			remove = Boolean.valueOf(data[5]);
+			loc = new Locale(this, String.valueOf(data[6]));
+			loc.init();
 			logger.info(loc.getString("ConfigLoaded"));
 		} catch(IOException e) {
 			e.printStackTrace();
