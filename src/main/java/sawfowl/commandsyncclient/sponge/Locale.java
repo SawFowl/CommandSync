@@ -3,6 +3,7 @@ package sawfowl.commandsyncclient.sponge;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystem;
@@ -10,6 +11,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Properties;
 
 import net.kyori.adventure.text.Component;
@@ -199,16 +201,15 @@ public class Locale {
 	 */
 	private boolean saveLocale(final String name) {
 		String configTypeName = ".properties";
-		plugin.getContainer().openResource(URI.create(File.separator + name + configTypeName)).ifPresent(inputStream -> {
-			if(!localeFile.exists()) {
-				try {
-					Files.copy(inputStream, new File(plugin.configDir + File.separator + name + ".properties").toPath());
-				} catch (IOException e) {
-					plugin.getLogger().error("Failed to save \"" + name + ".properties \n \"", e.getLocalizedMessage());
-					if(!name.equals("en_US")) saveLocale("en_US");
-				}
-			}
-		});
+		Optional<InputStream> locale = plugin.getContainer().openResource(URI.create(File.separator + name + configTypeName));
+		if(!locale.isPresent()) return false;
+		InputStream inputStream = locale.get();
+		if(!localeFile.exists()) try {
+			Files.copy(inputStream, new File(plugin.configDir + File.separator + name + ".properties").toPath());
+		} catch (IOException e) {
+			plugin.getLogger().error("Failed to save \"" + name + ".properties \n \"", e.getLocalizedMessage());
+			if(!name.equals("en_US")) saveLocale("en_US");
+		}
 		return true;
 	}
 }
