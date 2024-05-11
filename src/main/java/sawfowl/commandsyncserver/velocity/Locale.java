@@ -12,7 +12,6 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Properties;
 
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
