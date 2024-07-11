@@ -37,6 +37,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Proxy;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
@@ -412,7 +413,7 @@ public class Metrics {
 		json.append('}');
 
 		// Create the url
-		URL url = new URL(BASE_URL + String.format(REPORT_URL, urlEncode(PluginInfo.NAME)));
+		URL url = URI.create(BASE_URL + String.format(REPORT_URL, urlEncode(PluginInfo.NAME))).toURL();
 
 		// Connect to the website
 		URLConnection connection;

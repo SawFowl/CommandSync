@@ -8,7 +8,7 @@ group = "sawfowl"
 version = "${major}.${minor}.${patch}-${suffix}"
 
 java {
-	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -36,15 +36,15 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-	implementation "org.spongepowered:spongeapi:${api}"
-	implementation "org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT"
-	implementation "net.md-5:bungeecord-api:1.20-R0.2"
-	implementation 'com.velocitypowered:velocity-api:3.1.1'
-	annotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
+	implementation "org.spongepowered:spongeapi:${sponge}"
+	implementation "org.spigotmc:spigot-api:${spigot}"
+	implementation "net.md-5:bungeecord-api:${bungeecord}"
+	implementation "com.velocitypowered:velocity-api:${velocity}"
+	annotationProcessor "com.velocitypowered:velocity-api:${velocity}"
 }
 
 sponge {
-	apiVersion("${api}")
+	apiVersion("${sponge}")
 	loader {
 		name("java_plain")
 		version("1.0")
@@ -69,7 +69,7 @@ sponge {
 		dependency("spongeapi") {
 			optional(false)
 			loadOrder("after")
-			version("${api}")
+			version("${sponge}")
 		}
 	}
 }
