@@ -71,7 +71,7 @@ public class CSC extends JavaPlugin {
 
 	public String[] loadConfig() {
 		String[] defaults = new String[] {
-			"ip=localhost", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
+			"ip=YOUR_PROXY_ADDRESS", "port=39999", "heartbeat=1000", "name=UNSET", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
 		try {

@@ -112,7 +112,7 @@ public class CSS extends Plugin {
 	
 	private String[] loadConfig() {
 		String[] defaults = new String[] {
-			"ip=localhost", "port=39999", "heartbeat=1000", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
+			"ip=0.0.0.0", "port=39999", "heartbeat=1000", "pass=UNSET", "debug=false", "removedata=false", "lang=en_US"
 		};
 		String[] data = new String[defaults.length];
 		try {
