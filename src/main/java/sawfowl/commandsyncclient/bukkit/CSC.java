@@ -43,13 +43,17 @@ public class CSC extends JavaPlugin {
 			e.printStackTrace();
 		}
 		getCommand("Sync").setExecutor(new CommandSynchronize(this));
-		
 	}
 	
 	public void onDisable() {
 		saveData();
 		debugger.close();
-		loc = null;
+		getPluginLoader().disablePlugin(this);
+		setEnabled(false);
+		if(client != null && client.isAlive()) {
+			client.disconnect();
+			client = null;
+		}
 	}
 	
 	public Locale getLocale() {
@@ -103,10 +107,12 @@ public class CSC extends JavaPlugin {
 			ps.close();
 			debugger = new Debugger(this, Boolean.valueOf(data[5]));
 			remove = Boolean.valueOf(data[6]);
-			loc = new Locale(this, String.valueOf(data[7]));
+			loc = new Locale(this, data[7]);
 			loc.init();
 			Bukkit.getConsoleSender().sendMessage(loc.getString("ConfigLoaded"));
 		} catch(IOException e) {
+			loc = new Locale(this, "en_US");
+			loc.init();
 			e.printStackTrace();
 		}
 		return data;

@@ -85,6 +85,15 @@ public class ClientThread extends Thread {
 		}
 	}
 	
+	public void disconnect() {
+		connected = false;
+		if(socket != null && socket.isConnected()) try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void connect(Boolean sleep) {
 		if(sleep) {
 			try {
